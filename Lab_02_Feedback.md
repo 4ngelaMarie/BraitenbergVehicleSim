@@ -1,6 +1,6 @@
 ### Feedback for Lab 02
 
-Run on January 27, 10:09:31 AM.
+Run on January 27, 10:15:03 AM.
 
 
 #### Necessary Files and Structure
@@ -23,7 +23,7 @@ Run on January 27, 10:09:31 AM.
 
 + Fail: Check that no files with extension ".o" exist in directory "."
 
- "mallard_duck.o" found
+ "quack_quack.o" found
 
 + Skip: Check that no files with extension ".out" exist in directory "."
 

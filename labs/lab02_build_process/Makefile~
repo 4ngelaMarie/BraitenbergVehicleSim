@@ -1,0 +1,4 @@
+mallard_duck.o: mallard_duck.h mallard_duck.cc
+	g++ -c mallard_duck.cc
+rubber_duck.o: duck.h rubber_duck.h rubber_duck.cc
+	g++ -c rubber_duck.cc

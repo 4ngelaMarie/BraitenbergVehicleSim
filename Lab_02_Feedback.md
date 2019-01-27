@@ -1,6 +1,6 @@
 ### Feedback for Lab 02
 
-Run on January 27, 10:03:28 AM.
+Run on January 27, 10:09:31 AM.
 
 
 #### Necessary Files and Structure
@@ -16,16 +16,14 @@ Run on January 27, 10:03:28 AM.
 
 + Pass: Check that file "Makefile" exists.
 
-+ Fail: Check that file ".gitignore" exists.
-
-     ".gitignore" not found.
++ Pass: Check that file ".gitignore" exists.
 
 
 ### .gitignore set up properly
 
-+ Skip: Check that no files with extension ".o" exist in directory "."
++ Fail: Check that no files with extension ".o" exist in directory "."
 
-  This test was not run because of an earlier failing test.
+ "mallard_duck.o" found
 
 + Skip: Check that no files with extension ".out" exist in directory "."
 

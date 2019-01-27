@@ -13,5 +13,5 @@ using std::cout;
 using std::endl;
 
 void SqueakQuack::Quack() {
-    cout << "BARK!!" << endl;
+    cout << "SQUEAK!!" << endl;
 }

@@ -2,3 +2,5 @@
 *.*~
 cluster
 point2_unittest
+gtest_main.a
+../../exercises/ex01_robot_classes/robot

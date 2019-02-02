@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "point2.h"
-Point2::Point2( float x, float y ) {
+Point2::Point2( float x, float y) {
   position_[0] = x;
   position_[1] = y;
 }

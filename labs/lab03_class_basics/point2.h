@@ -4,7 +4,7 @@
 class Point2 {
   public:
     Point2(float x = 0.0, float y = 0.0); //default sets to zero if no input
-	float DistanceBetween( Point2 cluster);
+	float DistanceBetween(Point2 cluster);
 	int Quadrant();
 	void Print();
 	

@@ -31,7 +31,7 @@ int main() {
   float x, y;
   srand(time(NULL));
   for (int i=0; i<point_count; i++) {
-    sign_x = sign_y = 1;
+    sign_x = sign_y = 1.0;
     if (rand()%10 < 5) {
       sign_x = -1;
     }

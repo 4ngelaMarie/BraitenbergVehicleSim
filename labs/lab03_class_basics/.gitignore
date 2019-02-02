@@ -3,4 +3,6 @@
 cluster
 point2_unittest
 gtest_main.a
+point2
+main.cc
 ../../exercises/ex01_robot_classes/robot

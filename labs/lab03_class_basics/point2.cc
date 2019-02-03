@@ -2,10 +2,12 @@
 #include <iostream>
 
 #include "point2.h"
+
 Point2::Point2( float x, float y) {
   position_[0] = x;
   position_[1] = y;
 }
+
 float Point2::DistanceBetween( Point2 cluster){
 	//pythagrean thm
 	float distance = sqrt(pow((position_[0] - cluster.position_[0]), 2.0) 

@@ -12,7 +12,6 @@ float Point2::DistanceBetween( Point2 cluster){
 	//pythagrean thm
 	float distance = sqrt(pow((position_[0] - cluster.position_[0]), 2.0) 
 	+ pow((position_[1] - cluster.position_[1]), 2.0));
-	
 	return distance; 
 }
 

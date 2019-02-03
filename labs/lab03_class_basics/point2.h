@@ -7,6 +7,7 @@ class Point2 {
 	float DistanceBetween(Point2 cluster);
 	int Quadrant();
 	void Print();
+	
   private:
     float position_[2];
   };

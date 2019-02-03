@@ -5,7 +5,6 @@ point2_unittest
 <<<<<<< HEAD
 gtest_main.a
 point2
-main.cc
 ../../exercises/ex01_robot_classes/robot
 =======
 >>>>>>> c54e6bab3084dcca90022bc0f6c278d3ef148772

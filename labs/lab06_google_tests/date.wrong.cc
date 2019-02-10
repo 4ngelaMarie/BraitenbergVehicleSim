@@ -39,7 +39,7 @@ Date::Date(int epoch) {
   std::tm* yyyy_mm_dd = std::gmtime( &epoch_t );
   
   //tm year's value is years since 1900
-  yyyy_ = yyyy_mm_dd->tm_year + 1970;
+  yyyy_ = yyyy_mm_dd->tm_year + 1970; 
   //tm month's value is zero-indexed
   mm_ = yyyy_mm_dd->tm_mon + 1;
   //tm day's value is one-indexed
@@ -79,10 +79,10 @@ Date Date::operator-(int days) const{
 **/
 int Date::DaysBetween(const Date& date) const {
   int this_days = ConvertToDays(yyyy_, mm_, dd_);
-  //std::cout << "Debugging ConvertToDays (LHS): " << this_days << std::endl;
+ // std::cout << "Debugging ConvertToDays (LHS): " << this_days << std::endl;
   int that_days = ConvertToDays(date.yyyy_, date.mm_, date.dd_);
-  //std::cout << "Debugging ConvertToDays: (RHS)" << that_days << std::endl;
-  return std::abs(this_days + that_days);
+ // std::cout << "Debugging ConvertToDays: (RHS)" << that_days << std::endl;
+  return std::abs(this_days + that_days); 
 }
 
 /**
@@ -156,7 +156,7 @@ void Date::PrintUsDate(bool newline) const {
    *   https://www.hermetic.ch/cal_stud/jdn.htm#comp
    *
    */
-   
+ 
 int Date::ConvertToDays(int yyyy, int mm, int dd) const{
   return ( 1461 * ( yyyy + 4800 + ( mm - 14 ) / 12 ) ) / 4 +
           ( 367 * ( mm - 2 - 12 * ( ( mm - 14 ) / 12 ) ) ) / 12 -
@@ -178,3 +178,4 @@ int * Date::ConvertFromDays(int days) const{
   date_back[0] = 100 * ( n - 49 ) + i + l;
   return date_back;
 }
+

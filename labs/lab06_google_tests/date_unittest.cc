@@ -247,9 +247,4 @@ TEST_F(DateTest, LeadingZerosTests) {
   * NOPE!  Can't test PRIVATE methods
   *
   */
-/*
-TEST(DateTest, ConvertFromDays) {
-	Date convert_first_day = ConvertToDays(2458365);
-	EXPECT_STREQ(convert_first_day.GetUsDate(), "09-04-2018");
-}
-*/
+

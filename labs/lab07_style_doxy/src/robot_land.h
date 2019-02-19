@@ -154,9 +154,7 @@ class robot_land {
 
   /**
    * @brief Get the radius of the specified obstacle.
-   *
    * @param[in] id The ID of the obstacle.
-   *
    * @return The obstacle's radius.
    */
   double get_obstacle_radius();

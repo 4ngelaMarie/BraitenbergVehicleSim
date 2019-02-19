@@ -66,7 +66,6 @@ void RobotViewer::DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos,
   // translate and rotate all graphics calls that follow so that they are
   // centered
   // at the position and heading for this robot
-
   // *********
   // IMPORTANT: the nvgSave(ctx) saves the current origin of the coordinate
   // system. When you translate and rotate, it modifies the origin. Any

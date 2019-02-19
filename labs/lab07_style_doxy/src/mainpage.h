@@ -14,7 +14,6 @@
  * @brief Obstacle class includes a function that returns the position of obstacle
  *
  * @param Has parameters radius and position
- *
  */
 class Obstacle {
  public:

@@ -15,10 +15,10 @@ public:
     object_.Print();
   }
 protected:
-  // int var_b_;
+   int var_b_;
 private:
   ObjectClass object_;
-  // int var_a_;
+   int var_a_;
 };
 
 #endif

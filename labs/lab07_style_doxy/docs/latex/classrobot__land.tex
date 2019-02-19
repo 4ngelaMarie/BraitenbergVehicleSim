@@ -1,0 +1,272 @@
+\hypertarget{classrobot__land}{}\section{robot\+\_\+land Class Reference}
+\label{classrobot__land}\index{robot\+\_\+land@{robot\+\_\+land}}
+
+
+The main class for the simulation of a 2D world with many robots running around.  
+
+
+
+
+{\ttfamily \#include $<$robot\+\_\+land.\+h$>$}
+
+
+
+Collaboration diagram for robot\+\_\+land\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{classrobot__land__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classrobot__land_a9b759efccbcae2be07ead240caec14cf}{set\+\_\+time} (double t)
+\begin{DoxyCompactList}\small\item\em Set the simulation time for Robot\+Land. \end{DoxyCompactList}\item 
+void \hyperlink{classrobot__land_af48446e7dafcf509fd3c13e66e17466b}{advance\+Time} (double dt)
+\begin{DoxyCompactList}\small\item\em Advance the simulation by the specified \# of steps. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classrobot__land_a9469257602322310502bfe0298bea0e4}\label{classrobot__land_a9469257602322310502bfe0298bea0e4}} 
+double \hyperlink{classrobot__land_a9469257602322310502bfe0298bea0e4}{get\+\_\+current\+\_\+time} (void)
+\begin{DoxyCompactList}\small\item\em Get the current simulation time. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classrobot__land_a604710cec501348f61c009ed9066232e}\label{classrobot__land_a604710cec501348f61c009ed9066232e}} 
+int {\bfseries get\+\_\+num\+\_\+robots} (void)
+\item 
+bool \hyperlink{classrobot__land_a600cee26e615092e6425e5f1f8544d8b}{get\+\_\+robot\+\_\+pos} (int id, double $\ast$x\+\_\+pos, double $\ast$y\+\_\+pos)
+\begin{DoxyCompactList}\small\item\em Get the current position of the specified robot. Currently a stub. \end{DoxyCompactList}\item 
+bool \hyperlink{classrobot__land_a2c12e8cb4cea6ca18db18b30b205b6a8}{get\+\_\+robot\+\_\+vel} (int id, double $\ast$x\+\_\+vel, double $\ast$y\+\_\+vel)
+\begin{DoxyCompactList}\small\item\em Get the current velocity of the specified robot. Currently a stub. \end{DoxyCompactList}\item 
+double \hyperlink{classrobot__land_a874897fdbb0d4bf54cd70226d3515bdd}{get\+\_\+robot\+\_\+radius} ()
+\begin{DoxyCompactList}\small\item\em Get the radius of the specified robot. Currently a stub. \end{DoxyCompactList}\item 
+double \hyperlink{classrobot__land_a9f874d4ea9cb32801af60413753a39f7}{get\+\_\+robot\+\_\+sensor\+\_\+angle} ()
+\begin{DoxyCompactList}\small\item\em Get the angle of the specified robots sensor, in radians. Currently a stub. \end{DoxyCompactList}\item 
+double \hyperlink{classrobot__land_a4bef892a1b2c7c6a539dfed5fd2abae5}{get\+\_\+robot\+\_\+sensor\+\_\+distance} ()
+\begin{DoxyCompactList}\small\item\em Get the distance of a specified robot\textquotesingle{}s sensor. Currently a stub. \end{DoxyCompactList}\item 
+int \hyperlink{classrobot__land_ab6edf762a971b54341c1d0740c2c431d}{get\+\_\+num\+\_\+obstacles} (void)
+\begin{DoxyCompactList}\small\item\em Get the \# of obstacles currently in Robot\+Land. Currently a stub. \end{DoxyCompactList}\item 
+bool \hyperlink{classrobot__land_ab9f49e83909a16ecc0aeae8f6fa6f673}{get\+\_\+obstacle\+\_\+pos} (int id, double $\ast$x\+\_\+pos, double $\ast$y\+\_\+pos)
+\begin{DoxyCompactList}\small\item\em Get the position of the specified obstacle. Currently a stub. \end{DoxyCompactList}\item 
+double \hyperlink{classrobot__land_aefbde3fcc92d17c9a048f496f2cd7454}{get\+\_\+obstacle\+\_\+radius} ()
+\begin{DoxyCompactList}\small\item\em Get the radius of the specified obstacle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The main class for the simulation of a 2D world with many robots running around. 
+
+\hyperlink{classRobotViewer}{Robot\+Viewer} or Tests call \hyperlink{classrobot__land_a9b759efccbcae2be07ead240caec14cf}{set\+\_\+time} and advance\+\_\+time to control the simulation and use the get$\ast$() functions to read out the current state of the simulation (i.\+e., the current positions and orientations of robots and obstacles).
+
+For now, Robot\+Land is hard coded to run a simulation of two robots running around in a circle. You can see their sensors, but they don\textquotesingle{}t yet respond to each other or to obstacles. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classrobot__land_af48446e7dafcf509fd3c13e66e17466b}\label{classrobot__land_af48446e7dafcf509fd3c13e66e17466b}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!advance\+Time@{advance\+Time}}
+\index{advance\+Time@{advance\+Time}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{advance\+Time()}{advanceTime()}}
+{\footnotesize\ttfamily void robot\+\_\+land\+::advance\+Time (\begin{DoxyParamCaption}\item[{double}]{dt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Advance the simulation by the specified \# of steps. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em dt} & The \# of steps to increment by. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classrobot__land_ab6edf762a971b54341c1d0740c2c431d}\label{classrobot__land_ab6edf762a971b54341c1d0740c2c431d}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+num\+\_\+obstacles@{get\+\_\+num\+\_\+obstacles}}
+\index{get\+\_\+num\+\_\+obstacles@{get\+\_\+num\+\_\+obstacles}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+num\+\_\+obstacles()}{get\_num\_obstacles()}}
+{\footnotesize\ttfamily int robot\+\_\+land\+::get\+\_\+num\+\_\+obstacles (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Get the \# of obstacles currently in Robot\+Land. Currently a stub. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000008}{Todo}]\+: Actually implement this.\end{DoxyRefDesc}
+
+
+\begin{DoxyReturn}{Returns}
+The \# of obstacles. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobot__land_ab9f49e83909a16ecc0aeae8f6fa6f673}\label{classrobot__land_ab9f49e83909a16ecc0aeae8f6fa6f673}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+obstacle\+\_\+pos@{get\+\_\+obstacle\+\_\+pos}}
+\index{get\+\_\+obstacle\+\_\+pos@{get\+\_\+obstacle\+\_\+pos}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+obstacle\+\_\+pos()}{get\_obstacle\_pos()}}
+{\footnotesize\ttfamily bool robot\+\_\+land\+::get\+\_\+obstacle\+\_\+pos (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{double $\ast$}]{x\+\_\+pos,  }\item[{double $\ast$}]{y\+\_\+pos }\end{DoxyParamCaption})}
+
+
+
+Get the position of the specified obstacle. Currently a stub. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000009}{Todo}]\+: Actually implement this.\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em id} & The ID of the obstacle. \\
+\hline
+\mbox{\tt out}  & {\em x\+\_\+pos} & The X component of the position. \\
+\hline
+\mbox{\tt out}  & {\em y\+\_\+pos} & The Y component of the position.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000010}{Todo}]What does this mean? \end{DoxyRefDesc}
+\mbox{\Hypertarget{classrobot__land_aefbde3fcc92d17c9a048f496f2cd7454}\label{classrobot__land_aefbde3fcc92d17c9a048f496f2cd7454}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+obstacle\+\_\+radius@{get\+\_\+obstacle\+\_\+radius}}
+\index{get\+\_\+obstacle\+\_\+radius@{get\+\_\+obstacle\+\_\+radius}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+obstacle\+\_\+radius()}{get\_obstacle\_radius()}}
+{\footnotesize\ttfamily double robot\+\_\+land\+::get\+\_\+obstacle\+\_\+radius (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the radius of the specified obstacle. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em id} & The ID of the obstacle.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The obstacle\textquotesingle{}s radius. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobot__land_a600cee26e615092e6425e5f1f8544d8b}\label{classrobot__land_a600cee26e615092e6425e5f1f8544d8b}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+robot\+\_\+pos@{get\+\_\+robot\+\_\+pos}}
+\index{get\+\_\+robot\+\_\+pos@{get\+\_\+robot\+\_\+pos}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+robot\+\_\+pos()}{get\_robot\_pos()}}
+{\footnotesize\ttfamily bool robot\+\_\+land\+::get\+\_\+robot\+\_\+pos (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{double $\ast$}]{x\+\_\+pos,  }\item[{double $\ast$}]{y\+\_\+pos }\end{DoxyParamCaption})}
+
+
+
+Get the current position of the specified robot. Currently a stub. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]\+: Actually implement this.\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em id} & The ID of the robot. \\
+\hline
+\mbox{\tt out}  & {\em x\+\_\+pos} & The X position of the robot. \\
+\hline
+\mbox{\tt out}  & {\em y\+\_\+pos} & The Y position of the robot.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000002}{Todo}]\+: What does this mean? \end{DoxyRefDesc}
+\mbox{\Hypertarget{classrobot__land_a874897fdbb0d4bf54cd70226d3515bdd}\label{classrobot__land_a874897fdbb0d4bf54cd70226d3515bdd}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+robot\+\_\+radius@{get\+\_\+robot\+\_\+radius}}
+\index{get\+\_\+robot\+\_\+radius@{get\+\_\+robot\+\_\+radius}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+robot\+\_\+radius()}{get\_robot\_radius()}}
+{\footnotesize\ttfamily double robot\+\_\+land\+::get\+\_\+robot\+\_\+radius (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the radius of the specified robot. Currently a stub. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000005}{Todo}]\+: Actually implement this.\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em id} & The ID of the robot.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The robot\textquotesingle{}s radius. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobot__land_a9f874d4ea9cb32801af60413753a39f7}\label{classrobot__land_a9f874d4ea9cb32801af60413753a39f7}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+robot\+\_\+sensor\+\_\+angle@{get\+\_\+robot\+\_\+sensor\+\_\+angle}}
+\index{get\+\_\+robot\+\_\+sensor\+\_\+angle@{get\+\_\+robot\+\_\+sensor\+\_\+angle}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+robot\+\_\+sensor\+\_\+angle()}{get\_robot\_sensor\_angle()}}
+{\footnotesize\ttfamily double robot\+\_\+land\+::get\+\_\+robot\+\_\+sensor\+\_\+angle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the angle of the specified robots sensor, in radians. Currently a stub. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000006}{Todo}]\+: Actually implement this.\end{DoxyRefDesc}
+
+
+\begin{DoxyReturn}{Returns}
+The sensor angle in radians, 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobot__land_a4bef892a1b2c7c6a539dfed5fd2abae5}\label{classrobot__land_a4bef892a1b2c7c6a539dfed5fd2abae5}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+robot\+\_\+sensor\+\_\+distance@{get\+\_\+robot\+\_\+sensor\+\_\+distance}}
+\index{get\+\_\+robot\+\_\+sensor\+\_\+distance@{get\+\_\+robot\+\_\+sensor\+\_\+distance}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+robot\+\_\+sensor\+\_\+distance()}{get\_robot\_sensor\_distance()}}
+{\footnotesize\ttfamily double robot\+\_\+land\+::get\+\_\+robot\+\_\+sensor\+\_\+distance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the distance of a specified robot\textquotesingle{}s sensor. Currently a stub. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000007}{Todo}]\+: Actually implement this.\end{DoxyRefDesc}
+
+
+\begin{DoxyReturn}{Returns}
+The sensor distance. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobot__land_a2c12e8cb4cea6ca18db18b30b205b6a8}\label{classrobot__land_a2c12e8cb4cea6ca18db18b30b205b6a8}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!get\+\_\+robot\+\_\+vel@{get\+\_\+robot\+\_\+vel}}
+\index{get\+\_\+robot\+\_\+vel@{get\+\_\+robot\+\_\+vel}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{get\+\_\+robot\+\_\+vel()}{get\_robot\_vel()}}
+{\footnotesize\ttfamily bool robot\+\_\+land\+::get\+\_\+robot\+\_\+vel (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{double $\ast$}]{x\+\_\+vel,  }\item[{double $\ast$}]{y\+\_\+vel }\end{DoxyParamCaption})}
+
+
+
+Get the current velocity of the specified robot. Currently a stub. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000003}{Todo}]Actually implement this.\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em id} & The ID of the robot. \\
+\hline
+\mbox{\tt out}  & {\em x\+\_\+vel} & The X component of velocity. \\
+\hline
+\mbox{\tt out}  & {\em y\+\_\+vel} & The Y component of velocity.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000004}{Todo}]what does this mean? \end{DoxyRefDesc}
+\mbox{\Hypertarget{classrobot__land_a9b759efccbcae2be07ead240caec14cf}\label{classrobot__land_a9b759efccbcae2be07ead240caec14cf}} 
+\index{robot\+\_\+land@{robot\+\_\+land}!set\+\_\+time@{set\+\_\+time}}
+\index{set\+\_\+time@{set\+\_\+time}!robot\+\_\+land@{robot\+\_\+land}}
+\subsubsection{\texorpdfstring{set\+\_\+time()}{set\_time()}}
+{\footnotesize\ttfamily void robot\+\_\+land\+::set\+\_\+time (\begin{DoxyParamCaption}\item[{double}]{t }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the simulation time for Robot\+Land. 
+
+This function will be used mainly for testing purposes, as time flows in a steady forward direction in general simulation.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em t} & The new simulation time. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/almqu071/\+C\+S\+C\+I3081/3081\+\_\+\+S19/repo-\/almqu071/labs/lab07\+\_\+style\+\_\+doxy/src/\hyperlink{robot__land_8h}{robot\+\_\+land.\+h}\item 
+/home/almqu071/\+C\+S\+C\+I3081/3081\+\_\+\+S19/repo-\/almqu071/labs/lab07\+\_\+style\+\_\+doxy/src/\hyperlink{robot__land_8cc}{robot\+\_\+land.\+cc}\end{DoxyCompactItemize}

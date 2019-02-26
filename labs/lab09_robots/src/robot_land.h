@@ -12,6 +12,7 @@
  ******************************************************************************/
 #include <cmath>
 #include <iostream>
+#include "robot.h"
 
 /*******************************************************************************
  * Class Definitions
@@ -31,7 +32,8 @@
  */
 class RobotLand {
  public:
-  RobotLand(void) {}
+  RobotLand(void);
+  ~RobotLand();
 
   /**
    * @brief Set the simulation time for \ref RobotLand.
@@ -129,10 +131,12 @@ class RobotLand {
   double get_obstacle_radius() { return 75; }
 
  private:
+  Robot * robot0;
+  Robot * robot1;
   // Hard coding these robots to move in a circle
   double circle_x(double t) { return 512 + 200.0 * cos(t); }
   double circle_y(double t) { return 350 + 200.0 * sin(t); }
-
+  
   double sim_time_{0.0};
 };
 

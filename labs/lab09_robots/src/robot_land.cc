@@ -8,11 +8,14 @@
  * Includes
  ******************************************************************************/
 #include "src/robot_land.h"
-
+#include "robot.h"
 /*******************************************************************************
  * Member Functions
  ******************************************************************************/
-
+RobotLand::RobotLand(void) {
+	robot0 = new Robot(0, get_robot_radius(), Point origin, 0.0); //origin may be different than (0,0)
+	robot1 = new Robot(1, get_robot_radius(), Point origin, 0.0);
+}
 // Hard coded for now...
 bool RobotLand::get_robot_pos(int id, double *x_pos, double *y_pos) {
   if (id == 0) {
@@ -63,4 +66,8 @@ bool RobotLand::get_robot_vel(int id, double *x_vel, double *y_vel) {
 void RobotLand::get_obstacle_pos(double *x_pos, double *y_pos) {
   *x_pos = 200;
   *y_pos = 300;
+}
+RobotLand::~RobotLand(){
+	delete robot0;
+	delete robot1;
 }

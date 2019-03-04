@@ -21,7 +21,7 @@
  ******************************************************************************/
 NAMESPACE_BEGIN(csci3081);
 
-class Controller;
+class Controller;  //added controller_
 
 /*******************************************************************************
  * Class Definitions
@@ -238,7 +238,7 @@ class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer {
 
   bool RunViewer() override;
 
-  Controller *controller_;
+  Controller *controller_; 
   Arena *arena_;
   bool paused_{true};
 

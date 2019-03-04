@@ -64,6 +64,7 @@ struct Pose {
    * @param rhs The Pose object on the right hand side of the - operator.
    *
    * @return The Pose of the vector difference of the two vectors.
+   * TODO: Add to Pose distance distance_between (e.g. overload operator -) DONE
    **/
   Pose operator-(const Pose &rhs) const {
     double x_new = x - rhs.x;

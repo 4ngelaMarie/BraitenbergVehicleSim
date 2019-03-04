@@ -226,7 +226,7 @@ bool Arena::IsColliding(
  * is likely due to the adjustment being in the wrong direction. This could
  * be because the cos/sin generate the wrong sign of the distance_to_move
  * when the collision is in a specific quadrant relative to the center of the
- * colliding entities..
+ * colliding entities.. switched plus signs to minus signs in lines 240 & 241
  */
 void Arena::AdjustEntityOverlap(ArenaMobileEntity * const mobile_e,
   ArenaEntity *const other_e) {
@@ -237,8 +237,8 @@ void Arena::AdjustEntityOverlap(ArenaMobileEntity * const mobile_e,
       mobile_e->get_radius() + other_e->get_radius() - distance_between;
     double angle = atan(delta_y/delta_x);
     mobile_e->set_position(
-      mobile_e->get_pose().x+cos(angle)*distance_to_move,
-      mobile_e->get_pose().y+sin(angle)*distance_to_move);
+      mobile_e->get_pose().x-cos(angle)*distance_to_move,
+      mobile_e->get_pose().y-sin(angle)*distance_to_move); 
 }
 
 NAMESPACE_END(csci3081);

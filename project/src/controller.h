@@ -66,8 +66,17 @@ class Controller {
   */
   void Reset();
 
-
-  Controller &operator=(const Controller &other) = delete;
+  /**
+   * @brief Under certain circumstance, the compiler requires that the
+   * assignment operator is not defined. This `deletes` the default
+   * assignment operator.
+   */
+  Controller &operator=(const Controller &other) = delete; 
+  /**
+   * @brief Added: Under certain circumstance, the compiler requires that the copy
+   * constructor is not defined. This `deletes` the default copy constructor.
+   */
+  Controller(const Controller &other) = delete;
 
  private:
   double last_dt{0};

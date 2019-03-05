@@ -4,8 +4,8 @@
  * @copyright 2017 3081 Staff, All rights reserved.
  */
 
-#ifndef ROBOT_VIEWER_H_
-#define ROBOT_VIEWER_H_
+#ifndef LABS_LAB07_STYLE_DOXY_SRC_ROBOT_VIEWER_H_
+#define LABS_LAB07_STYLE_DOXY_SRC_ROBOT_VIEWER_H_
 
 /*******************************************************************************
  * Includes
@@ -204,7 +204,6 @@ class RobotViewer : public GraphicsApp {
 
   /**
    * @brief Draw an obostacle in the arena using nanogui.
-   *
    * @param[in] ctx The nanogui context.
    * @param[in] id The ID of the obstacle.
    * @param[in] xpos The X position of the obstacle.
@@ -218,5 +217,4 @@ class RobotViewer : public GraphicsApp {
   bool paused_{false};
   nanogui::Button *pause_btn_;
 };
-
-#endif /* ROBOT_VIEWER_H_ */
+#endif /* LABS_LAB07_STYLE_DOXY_SRC_ROBOT_VIEWER_H_ */

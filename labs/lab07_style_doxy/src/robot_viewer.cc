@@ -32,7 +32,6 @@ RobotViewer::RobotViewer()
 
   // Instantiate robot_land, which holds 2 robots and an obstacle.
   robot_land_ = new robot_land();
-
 }
 
 RobotViewer::~RobotViewer() { delete robot_land_; }
@@ -67,7 +66,6 @@ void RobotViewer::DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos,
   // translate and rotate all graphics calls that follow so that they are
   // centered
   // at the position and heading for this robot
-
   // *********
   // IMPORTANT: the nvgSave(ctx) saves the current origin of the coordinate
   // system. When you translate and rotate, it modifies the origin. Any
@@ -169,8 +167,7 @@ void RobotViewer::DrawObstacle(NVGcontext *ctx, int id, double xpos,
   nvgText(ctx, xpos, ypos, text.c_str(), NULL);
 }
 
-void RobotViewer::DrawUsingNanoVG(NVGcontext *ctx)
-{
+void RobotViewer::DrawUsingNanoVG(NVGcontext *ctx) {
   // initialize text rendering settings
   nvgFontSize(ctx, 18.0f);
   nvgFontFace(ctx, "sans-bold");

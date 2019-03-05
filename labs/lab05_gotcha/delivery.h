@@ -14,6 +14,7 @@ class Delivery {
   static int delivery_count_;
 public:
   Delivery(std::string package = "Default Package.");
+  Delivery(const Delivery &package);
   virtual ~Delivery();
   virtual void Transport();
   void Deliver();

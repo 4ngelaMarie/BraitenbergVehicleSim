@@ -14,13 +14,16 @@
 Delivery::Delivery(std::string package) :
   package_(package), days_to_deliver_(7) {
     std::cout << "Creating a delivery." << std::endl;
-    //IncrementCount();
+    IncrementCount();
     protected_variable_ = 100;
 }
-
+Delivery::Delivery(const Delivery &package) { //added copy constructor
+  std::cout << "Creating a delivery copy." << std::endl;
+  IncrementCount();
+}
 Delivery::~Delivery() {
   std::cout << "Deleting a delivery." << std::endl;
-  //DecrementCount();
+  DecrementCount();
 }
 
 void Delivery::Transport() {

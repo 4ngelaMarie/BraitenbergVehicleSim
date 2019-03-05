@@ -10,7 +10,7 @@
 #include "src/robot_viewer.h"
 #include <iostream>
 #include <string>
-
+//#include "point.h"
 /*******************************************************************************
  * Namespaces
  ******************************************************************************/
@@ -26,7 +26,7 @@ RobotViewer::RobotViewer()
   // Instantiate RobotLand, which holds 2 robots and an obstacle.
   robot_land_ = new RobotLand();
 }
-
+void DrawRobotSensors(NVGcontext *ctx, double sensor_angle, double sensor_range);
 void RobotViewer::InitNanoGUI() {
   // Create a menu with 2 buttons for pausing and restarting the simulation.
   // ADD BUTTONS here to change the color of each robot.
@@ -37,7 +37,7 @@ void RobotViewer::InitNanoGUI() {
   pause_btn_ =
       gui->addButton("Pause", std::bind(&RobotViewer::OnPauseBtnPressed, this));
   gui->addButton("Restart", std::bind(&RobotViewer::OnRestartBtnPressed, this));
-
+  //gui->addButton("Color", std::bind(&RobotViewer::OnRestartBtnPressed, this));
   screen()->performLayout();
 
   paused_ = false;
@@ -70,8 +70,10 @@ void RobotViewer::OnPauseBtnPressed() {
 
 // this function requires an active nanovg drawing context (ctx),
 // so it can only be called from within DrawUsingNanoVG()
-void RobotViewer::DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos,
-                            double xvel, double yvel, double rad, double sensor_angle, double sensor_range) {
+
+void DrawRobot(NVGcontext *ctx, Robot * robot){
+/*void RobotViewer::DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos,
+                            double xvel, double yvel, double rad, double sensor_angle, double sensor_range) {*/
   // translate and rotate all graphics calls that follow so that they are
   // centered
   // at the position and heading for this robot
@@ -87,13 +89,14 @@ void RobotViewer::DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos,
   // Put the origin of the coordinate system at the center of the robot, and
   // orient the x-axis to align with the velocity (i.e. heading) of the robot.
   nvgSave(ctx);
-  nvgTranslate(ctx, xpos, ypos);
-  double angle = std::atan2(yvel, xvel);
+  nvgTranslate(ctx, robot->get_position().x_, robot->get_position().y_);
+  //double angle = std::atan2(yvel, xvel);
+  double angle = std::atan2(robot->get_speed(), robot->get_speed()); //NOT CORRECT
   nvgRotate(ctx, angle);
 
   // robot's circle
   nvgBeginPath(ctx);
-  nvgCircle(ctx, 0.0, 0.0, rad);
+  nvgCircle(ctx, 0.0, 0.0, robot->get_radius());
   nvgFillColor(ctx, nvgRGBA(200, 200, 200, 255));
   nvgFill(ctx);
   nvgStrokeColor(ctx, nvgRGBA(0, 0, 0, 255));
@@ -103,11 +106,12 @@ void RobotViewer::DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos,
   nvgSave(ctx);
   nvgRotate(ctx, M_PI / 2.0);
   nvgFillColor(ctx, nvgRGBA(0, 0, 0, 255));
-  std::string text = "Robot " + std::to_string(id);
+  std::string text = "Robot " + std::to_string(robot->get_id());
   nvgText(ctx, 0.0, 10.0, text.c_str(), NULL);
   nvgRestore(ctx);
-
-  DrawRobotSensors(ctx, sensor_angle, sensor_range);
+  //double sensor_angle = robot_land_->get_robot_sensor_angle();
+  //double sensor_range = robot_land_->get_robot_sensor_range();
+  DrawRobotSensors(ctx, 2.0, (3.0*50.0)); //angle and range
 
   nvgRestore(ctx);
 }
@@ -198,7 +202,9 @@ void RobotViewer::DrawUsingNanoVG(NVGcontext *ctx) {
     double xvel, yvel;
     robot_land_->get_robot_vel(i, &xvel, &yvel);
 
-    DrawRobot(ctx, i, xpos, ypos, xvel, yvel, robot_land_->get_robot_radius(), robot_land_->get_robot_sensor_angle(), robot_land_->get_robot_sensor_range());
+    //DrawRobot(ctx, i, xpos, ypos, xvel, yvel, robot_land_->get_robot_radius(), robot_land_->get_robot_sensor_angle(), robot_land_->get_robot_sensor_range());
+    DrawRobot(ctx, robot_land_->robot0);
+    DrawRobot(ctx, robot_land_->robot1);
   }
 }
 

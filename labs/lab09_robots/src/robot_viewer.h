@@ -81,7 +81,7 @@ class RobotViewer : public GraphicsApp {
    * @brief Draw using OpenGL. This callback had to be defined, but we are doing
    * all drawing with nanovg in this application, so it is empty.
    */
-  void DrawUsingOpenGL(void) override {}
+  void DrawUsingOpenGL(void) override {};
 
   /**
    * @brief Handle the user pressing the restart button on the GUI.
@@ -201,8 +201,8 @@ class RobotViewer : public GraphicsApp {
    * @param[in] sensor_angle Angle between sensors relative to robot center.
    * @param[in] sensor_range Range distance in pixels of each sensor.
    */
-  void DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos, double xvel, double yvel, double rad, double sensor_angle, double sensor_range);
-
+  //void DrawRobot(NVGcontext *ctx, int id, double xpos, double ypos, double xvel, double yvel, double rad, double sensor_angle, double sensor_range);
+  void DrawRobot(NVGcontext *ctx, Robot * robot);
   /**
    * @brief Draw the sensors from a robot using nanogui.
    *

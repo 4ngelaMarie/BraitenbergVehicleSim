@@ -20,7 +20,6 @@ public:
     void day_inc(int) ;
 
     Date copy() const ;
-
 private:
     int year, month, day ;
 };

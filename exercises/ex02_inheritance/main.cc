@@ -10,11 +10,11 @@ using std::endl;
 int main() {
 
   cout << endl;
-
+/*
   ObjectClass base_object_default;
   cout << "Base default: ";
   base_object_default.Print();
-
+*/
   cout << endl;
   ObjectClass base_object_2_3(2,3);
   cout << "Base 2,3 : ";

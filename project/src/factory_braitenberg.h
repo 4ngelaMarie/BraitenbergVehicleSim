@@ -14,9 +14,9 @@
 #include <ctime>
 #include <string>
 #include <vector>
-#include "src/common.h"
 #include "src/arena_entity.h"
 #include "src/factory_entity.h"
+#include "src/braitenberg_vehicle.h"
 
 
 /*******************************************************************************
@@ -37,8 +37,21 @@ NAMESPACE_BEGIN(csci3081);
 class FactoryBraitenberg: public FactoryEntity {
 	public: 
 	FactoryBraitenberg(){};
-	BraitenbergVehicle * Create();
-}
+	virtual ~FactoryBraitenberg(){};
+	BraitenbergVehicle * Create() override;
+	  /**
+   * @brief Under certain circumstance, the compiler requires that the
+   * assignment operator is not defined. This `deletes` the default
+   * assignment operator.
+   */
+  FactoryBraitenberg &operator=(const FactoryBraitenberg &other) = delete;
+
+  /**
+   * @brief Under certain circumstance, the compiler requires that the copy
+   * constructor is not defined. This `deletes` the default copy constructor.
+   */
+  FactoryBraitenberg(const FactoryBraitenberg &other) = delete;
+};
 
 NAMESPACE_END(csci3081);
 

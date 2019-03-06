@@ -18,6 +18,7 @@
 #include "src/common.h"
 #include "src/food.h"
 #include "src/arena_mobile_entity.h"
+#include "src/braitenberg_vehicle.h"
 
 /*******************************************************************************
  * Namespaces

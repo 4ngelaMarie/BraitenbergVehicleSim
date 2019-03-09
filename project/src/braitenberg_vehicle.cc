@@ -36,13 +36,17 @@ BraitenbergVehicle::BraitenbergVehicle() :
   set_pose(ROBOT_INIT_POS);
 
   wheel_velocity_ = WheelVelocity(0, 0);
-
   // Set ID
   count++;
   set_id(count);
 }
 
 void BraitenbergVehicle::TimestepUpdate(__unused unsigned int dt) {
+  collision_counter++;
+  if (collision_counter % 21 == 0 && collision_counter < 25) {
+	collision_counter = 1;
+	set_heading(static_cast<int>((get_pose().theta + 45)) % 360);
+  }
   if (is_moving()) {
     motion_behavior_->UpdatePose(dt, wheel_velocity_);
   }
@@ -52,6 +56,7 @@ void BraitenbergVehicle::TimestepUpdate(__unused unsigned int dt) {
 void BraitenbergVehicle::HandleCollision(__unused EntityType ent_type,
                                          __unused ArenaEntity * object) {
   set_heading(static_cast<int>((get_pose().theta + 180)) % 360);
+  collision_counter = 1;
 }
 
 void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {

@@ -94,6 +94,24 @@ void BraitenbergVehicle::Update() {
         1.0/get_sensor_reading_right(closest_light_entity_),
          1.0/get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
       break;
+    case kLove:
+      set_color({255,204,51});
+      light_wheel_velocity = WheelVelocity(
+        1.0/get_sensor_reading_left(closest_light_entity_),
+         1.0/get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
+      break;
+    case kCoward:
+      set_color({255,204,51});
+      light_wheel_velocity = WheelVelocity(
+        get_sensor_reading_left(closest_light_entity_),
+         get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
+      break; 
+    case kAggressive:
+      set_color({255,204,51});
+      light_wheel_velocity = WheelVelocity(
+        get_sensor_reading_right(closest_light_entity_),
+         get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
+      break; 
     case kNone:
     default:
       numBehaviors--;
@@ -108,6 +126,24 @@ void BraitenbergVehicle::Update() {
       food_wheel_velocity = WheelVelocity(
         1.0/get_sensor_reading_right(closest_food_entity_),
         1.0/get_sensor_reading_left(closest_food_entity_), defaultSpeed_);
+      break;
+    case kLove:
+      set_color({0,0,255});
+      light_wheel_velocity = WheelVelocity(
+        1.0/get_sensor_reading_left(closest_light_entity_),
+         1.0/get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
+      break;
+    case kCoward:
+      set_color({0,0,255});
+      light_wheel_velocity = WheelVelocity(
+        get_sensor_reading_left(closest_light_entity_),
+         get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
+      break; 
+    case kAggressive:
+      set_color({0,0,255});
+      light_wheel_velocity = WheelVelocity(
+        get_sensor_reading_right(closest_light_entity_),
+         get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
       break;
     case kNone:
     default:

@@ -84,11 +84,12 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
 
 void BraitenbergVehicle::Update() {
   WheelVelocity light_wheel_velocity = WheelVelocity(0, 0);
-
+  
   int numBehaviors = 2;
 
   switch (light_behavior_) {
     case kExplore:
+      set_color({255,204,51});
       light_wheel_velocity = WheelVelocity(
         1.0/get_sensor_reading_right(closest_light_entity_),
          1.0/get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
@@ -103,6 +104,7 @@ void BraitenbergVehicle::Update() {
 
   switch (food_behavior_) {
     case kExplore:
+      set_color({0,0,255});
       food_wheel_velocity = WheelVelocity(
         1.0/get_sensor_reading_right(closest_food_entity_),
         1.0/get_sensor_reading_left(closest_food_entity_), defaultSpeed_);
@@ -114,6 +116,9 @@ void BraitenbergVehicle::Update() {
   }
 
   if (numBehaviors) {
+	if (food_behavior_ && light_behavior_) {
+      set_color(BRAITENBERG_COLOR);
+    }
     wheel_velocity_ = WheelVelocity(
       (light_wheel_velocity.left + food_wheel_velocity.left)/numBehaviors,
       (light_wheel_velocity.right + food_wheel_velocity.right)/numBehaviors,

@@ -93,7 +93,7 @@ class BraitenbergVehicle : public ArenaMobileEntity {
   double get_sensor_reading_right(const ArenaEntity* entity);
 
   static int count;
-  
+
   int collision_counter = 1;
 
  private:

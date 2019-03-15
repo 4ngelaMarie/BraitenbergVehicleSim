@@ -4,8 +4,8 @@
  * @copyright 2017 3081 Staff, All rights reserved.
  */
 
-#ifndef SRC_FACTORY_FOOD_
-#define SRC_FACTORY_FOOD_
+#ifndef SRC_FACTORY_FOOD_H_
+#define SRC_FACTORY_FOOD_H_
 
 /*******************************************************************************
  * Includes
@@ -35,11 +35,11 @@ NAMESPACE_BEGIN(csci3081);
  * up in four different ways, and thus they can exhibit four different behaviors
  */
 class FactoryFood: public FactoryEntity {
-	public: 
-	FactoryFood(){};
-	virtual ~FactoryFood(){};
-	Food * Create() override;
-	  /**
+ public:
+  FactoryFood() {}
+  virtual ~FactoryFood() {}
+  Food * Create(json_object &config) override;
+   /**
    * @brief Under certain circumstance, the compiler requires that the
    * assignment operator is not defined. This `deletes` the default
    * assignment operator.
@@ -55,6 +55,6 @@ class FactoryFood: public FactoryEntity {
 
 NAMESPACE_END(csci3081);
 
-#endif  // SRC_FACTORY_FOOD_
+#endif  // SRC_FACTORY_FOOD_H_
 
 

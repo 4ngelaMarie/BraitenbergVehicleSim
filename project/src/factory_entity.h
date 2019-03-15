@@ -4,8 +4,8 @@
  * @copyright 2017 3081 Staff, All rights reserved.
  */
 
-#ifndef SRC_FACTORY_ENTITY_
-#define SRC_FACTORY_ENTITY_
+#ifndef SRC_FACTORY_ENTITY_H_
+#define SRC_FACTORY_ENTITY_H_
 
 /*******************************************************************************
  * Includes
@@ -33,14 +33,26 @@ NAMESPACE_BEGIN(csci3081);
  * up in four different ways, and thus they can exhibit four different behaviors
  */
 class FactoryEntity {
-	public : 
-	FactoryEntity(){};
-	virtual ~FactoryEntity(){};
-	virtual ArenaEntity * Create() = 0;
+ public :
+    FactoryEntity() {}
+    virtual ~FactoryEntity() {}
+    virtual ArenaEntity * Create(json_object &config) = 0;
+     /**
+     * @brief Under certain circumstance, the compiler requires that the
+     * assignment operator is not defined. This `deletes` the default
+     * assignment operator.
+     */
+    FactoryEntity &operator=(const FactoryEntity &other) = delete;
+
+    /**
+     * @brief Under certain circumstance, the compiler requires that the copy
+     * constructor is not defined. This `deletes` the default copy constructor.
+    */
+    FactoryEntity(const FactoryEntity &other) = delete;
 };
 
 NAMESPACE_END(csci3081);
 
-#endif  // SRC_FACTORY_ENTITY_
+#endif  // SRC_FACTORY_ENTITY_H_
 
 

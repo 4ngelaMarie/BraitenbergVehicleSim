@@ -27,19 +27,23 @@ class FactoryBraitenbergtest : public ::testing::Test {
 
  protected:
   virtual void SetUp() {
-    arena = new csci3081::Arena();
+    factory = new csci3081::FactoryBraitenberg();
   }
+  std::string json = "{\"type:\":\"Braitenberg\"\"x\":270,\"y\":270,\"r\":15,\"theta\":215,\"light_behavior\":\"None\",\"food_behavior\":\"Explore\"}";
+  json_value* config_ = new json_value();
+  std::string err = parse_json(*config_, json);
+  csci3081::BraitenbergVehicle * bv = factory->Create(config_->get<json_object>());
   virtual void TearDown() {
-    delete arena;
+    delete factory;
   }
-  csci3081::Arena * arena;
+  csci3081::FactoryBraitenberg * factory;
 };
 
 /*******************************************************************************
  * Test Cases
  ******************************************************************************/
 
-TEST_F(FactoryBraitenbergtest, Constructor) {
+/*TEST_F(FactoryBraitenbergtest, Constructor) {
   auto bv = new csci3081::FactoryBraitenberg(); //intialize a factory
   auto robot = bv->Create();
   
@@ -67,6 +71,10 @@ TEST_F(FactoryBraitenbergtest, Constructor) {
   EXPECT_EQ(robot->get_id(), csci3081::BraitenbergVehicle::count);
   EXPECT_EQ(robot->is_mobile(), true);
   EXPECT_EQ(robot->get_speed(), 0.0);
-};
+};*/
 
+TEST_F(FactoryBraitenbergtest, Create) {
+  EXPECT_EQ(bv->get_pose().x, 270);
+  EXPECT_EQ(bv->get_pose().y, 270);
+};
 

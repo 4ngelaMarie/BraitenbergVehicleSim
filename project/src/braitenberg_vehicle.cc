@@ -44,8 +44,8 @@ BraitenbergVehicle::BraitenbergVehicle() :
 void BraitenbergVehicle::TimestepUpdate(__unused unsigned int dt) {
   collision_counter++;
   if (collision_counter % 21 == 0 && collision_counter < 25) {
-	collision_counter = 1;
-	set_heading(static_cast<int>((get_pose().theta + 45)) % 360);
+    collision_counter = 1;
+    set_heading(static_cast<int>((get_pose().theta + 45)) % 360);
   }
   if (is_moving()) {
     motion_behavior_->UpdatePose(dt, wheel_velocity_);
@@ -89,34 +89,34 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
 
 void BraitenbergVehicle::Update() {
   WheelVelocity light_wheel_velocity = WheelVelocity(0, 0);
-  
+
   int numBehaviors = 2;
 
   switch (light_behavior_) {
     case kExplore:
-      set_color({255,204,51});
+      set_color({255, 204, 51});
       light_wheel_velocity = WheelVelocity(
         1.0/get_sensor_reading_right(closest_light_entity_),
          1.0/get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
       break;
     case kLove:
-      set_color({255,204,51});
+      set_color({255, 204, 51});
       light_wheel_velocity = WheelVelocity(
         1.0/get_sensor_reading_left(closest_light_entity_),
          1.0/get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
       break;
     case kCoward:
-      set_color({255,204,51});
+      set_color({255, 204, 51});
       light_wheel_velocity = WheelVelocity(
         get_sensor_reading_left(closest_light_entity_),
          get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
-      break; 
+      break;
     case kAggressive:
-      set_color({255,204,51});
+      set_color({255, 204, 51});
       light_wheel_velocity = WheelVelocity(
         get_sensor_reading_right(closest_light_entity_),
          get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
-      break; 
+      break;
     case kNone:
     default:
       numBehaviors--;
@@ -127,25 +127,25 @@ void BraitenbergVehicle::Update() {
 
   switch (food_behavior_) {
     case kExplore:
-      set_color({0,0,255});
+      set_color({0, 0, 255});
       food_wheel_velocity = WheelVelocity(
         1.0/get_sensor_reading_right(closest_food_entity_),
         1.0/get_sensor_reading_left(closest_food_entity_), defaultSpeed_);
       break;
     case kLove:
-      set_color({0,0,255});
+      set_color({0, 0, 255});
       light_wheel_velocity = WheelVelocity(
         1.0/get_sensor_reading_left(closest_light_entity_),
          1.0/get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
       break;
     case kCoward:
-      set_color({0,0,255});
+      set_color({0, 0, 255});
       light_wheel_velocity = WheelVelocity(
         get_sensor_reading_left(closest_light_entity_),
          get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
-      break; 
+      break;
     case kAggressive:
-      set_color({0,0,255});
+      set_color({0, 0, 255});
       light_wheel_velocity = WheelVelocity(
         get_sensor_reading_right(closest_light_entity_),
          get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
@@ -157,7 +157,7 @@ void BraitenbergVehicle::Update() {
   }
 
   if (numBehaviors) {
-	if (food_behavior_ && light_behavior_) {
+    if (food_behavior_ && light_behavior_) {
       set_color(BRAITENBERG_COLOR);
     }
     wheel_velocity_ = WheelVelocity(

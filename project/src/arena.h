@@ -50,7 +50,7 @@ class Arena {
    *
    * Initialize all private variables and entities.
    */
-  explicit Arena();
+  Arena();
 
 
   explicit Arena(json_object& arena_object);

@@ -4,8 +4,8 @@
  * @copyright 2017 3081 Staff, All rights reserved.
  */
 
-#ifndef SRC_FACTORY_LIGHT_
-#define SRC_FACTORY_LIGHT_
+#ifndef SRC_FACTORY_LIGHT_H_
+#define SRC_FACTORY_LIGHT_H_
 
 /*******************************************************************************
  * Includes
@@ -17,7 +17,6 @@
 #include "src/arena_entity.h"
 #include "src/factory_entity.h"
 #include "src/light.h"
-
 
 /*******************************************************************************
  * Namespaces
@@ -35,10 +34,10 @@ NAMESPACE_BEGIN(csci3081);
  * up in four different ways, and thus they can exhibit four different behaviors
  */
 class FactoryLight: public FactoryEntity {
-	public: 
-	FactoryLight(){};
-	virtual ~FactoryLight(){};
-	Light * Create() override;
+ public:
+  FactoryLight() {}
+  virtual ~FactoryLight() {}
+  Light * Create(json_object &config) override;
 	  /**
    * @brief Under certain circumstance, the compiler requires that the
    * assignment operator is not defined. This `deletes` the default
@@ -55,5 +54,5 @@ class FactoryLight: public FactoryEntity {
 
 NAMESPACE_END(csci3081);
 
-#endif  // SRC_FACTORY_LIGHT_
+#endif  // SRC_FACTORY_LIGHT_H_
 

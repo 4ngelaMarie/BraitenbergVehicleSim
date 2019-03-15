@@ -11,6 +11,11 @@
 /*******************************************************************************
  * Includes
  ******************************************************************************/
+#include <nanogui/nanogui.h>
+#include <string>
+#include <fstream>
+#include <streambuf>
+ 
 #include <gtest/gtest.h>
 #include "src/factory_food.h"
 #include "src/entity_type.h"
@@ -24,7 +29,7 @@
  /******************************************************
 * TEST FEATURE SetUp
 *******************************************************/
-class FactoryFoodtest : public ::testing::Test {
+/*class FactoryFoodtest : public ::testing::Test {
 
  protected:
   virtual void SetUp() {
@@ -34,13 +39,28 @@ class FactoryFoodtest : public ::testing::Test {
     delete arena;
   }
   csci3081::Arena * arena;
-};
+};*/
+class FactoryFoodtest : public ::testing::Test {
 
+ protected:
+  virtual void SetUp() {
+    factory = new csci3081::FactoryFood();
+  }
+  std::string json = "{\"type:\":\"Food\"\"x\":100,\"y\":100,\"r\":20,\"theta\":0}";
+  json_value* config_ = new json_value();
+  std::string err = parse_json(*config_, json);
+  csci3081::Food * ff = factory->Create(config_->get<json_object>());
+  
+  virtual void TearDown() {
+    delete factory;
+  }
+  csci3081::FactoryFood * factory;
+};
 /*******************************************************************************
  * Test Cases
  ******************************************************************************/
 
-TEST_F(FactoryFoodtest, Constructor) {
+/*TEST_F(FactoryFoodtest, Constructor) {
   auto bv = new csci3081::FactoryFood(); //intialize a factory
   auto food = bv->Create();
   
@@ -56,6 +76,11 @@ TEST_F(FactoryFoodtest, Constructor) {
   EXPECT_EQ(food->get_radius(), 20);
   EXPECT_EQ(food->get_id(), csci3081::Food::count);
   EXPECT_EQ(food->is_mobile(), false);
+};*/
+TEST_F(FactoryFoodtest, Create) {
+/*
+  EXPECT_EQ(ff->get_pose().x, 100);
+  EXPECT_EQ(ff->get_pose().y, 100);*/
 };
 
 

@@ -11,7 +11,7 @@
  * Includes
  ******************************************************************************/
 #include <random>
-
+#include <string>
 #include <chrono>
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -21,7 +21,7 @@ typedef picojson::object json_object;
 typedef picojson::array json_array;
 std::string parse_json(json_value& v, const std::string& json);
 inline std::string parse_json(json_value& v, const std::string& json) {
-	return picojson::parse(v, json);
+  return picojson::parse(v, json);
 }
 
 /*******************************************************************************

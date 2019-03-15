@@ -23,7 +23,7 @@
  /******************************************************
 * TEST FEATURE SetUp
 *******************************************************/
-class FactoryLighttest : public ::testing::Test {
+/*class FactoryLighttest : public ::testing::Test {
 
  protected:
   virtual void SetUp() {
@@ -33,13 +33,29 @@ class FactoryLighttest : public ::testing::Test {
     delete arena;
   }
   csci3081::Arena * arena;
+};*/
+class FactoryLighttest : public ::testing::Test {
+
+ protected:
+  virtual void SetUp() {
+    factory = new csci3081::FactoryLight();
+  }
+  std::string json = "{\"type:\":\"Light\"\"x\":500,\"y\":350,\"r\":30}";
+  json_value* config_ = new json_value();
+  std::string err = parse_json(*config_, json);
+  csci3081::Light * fl = factory->Create(config_->get<json_object>());
+
+  virtual void TearDown() {
+    delete factory;
+  }
+  csci3081::FactoryLight * factory;
 };
 
 /*******************************************************************************
  * Test Cases
  ******************************************************************************/
 
-TEST_F(FactoryLighttest, Constructor) {
+/*TEST_F(FactoryLighttest, Constructor) {
   auto bv = new csci3081::FactoryLight(); //intialize a factory
   auto light = bv->Create();
   
@@ -55,6 +71,10 @@ TEST_F(FactoryLighttest, Constructor) {
   EXPECT_EQ(light->get_id(), csci3081::Light::count);
   EXPECT_EQ(light->is_mobile(), true);
   EXPECT_EQ(light->get_speed(), 3);
+};*/
+TEST_F(FactoryLighttest, Create) {
+  EXPECT_EQ(fl->get_pose().x, 500);
+  EXPECT_EQ(fl->get_pose().y, 350);
 };
 
 

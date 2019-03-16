@@ -40,6 +40,10 @@ Arena::Arena(json_object& arena_object): x_dim_(X_DIM),
       y_dim_(Y_DIM),
       entities_(),
       mobile_entities_() {
+  FactoryBraitenberg fb;
+  FactoryLight fl;
+  FactoryFood ff;
+  //json_object& arena_object = *arena_object_ptr;
   x_dim_ = arena_object["width"].get<double>();
   y_dim_ = arena_object["height"].get<double>();
   json_array& entities = arena_object["entities"].get<json_array>();
@@ -47,18 +51,18 @@ Arena::Arena(json_object& arena_object): x_dim_(X_DIM),
     json_object& entity_config = entities[f].get<json_object>();
     EntityType etype = get_entity_type(
       entity_config["type"].get<std::string>());
-
+      //json_object* entity_config_ptr = &entity_config;
     ArenaEntity* entity = NULL;
 
     switch (etype) {
       case (kLight):
-        entity = new Light();
+        entity = fl.Create(entity_config);
         break;
       case (kFood):
-        entity = new Food();
+        entity = ff.Create(entity_config);
         break;
       case (kBraitenberg):
-        entity = new BraitenbergVehicle();
+        entity = fb.Create(entity_config);
         break;
       default:
         std::cout << "FATAL: Bad entity type on creation" << std::endl;
@@ -66,7 +70,6 @@ Arena::Arena(json_object& arena_object): x_dim_(X_DIM),
     }
 
     if (entity) {
-      entity->LoadFromObject(entity_config);
       AddEntity(entity);
     }
   }

@@ -19,7 +19,7 @@ NAMESPACE_BEGIN(csci3081);
 /*******************************************************************************
  * Constructors/Destructor
  ******************************************************************************/
-Light * FactoryLight::Create(json_object &config) {
+Light * FactoryLight::Create(json_object& config) {
   Light *bl = new Light();
   bl->LoadFromObject(config);  // no longer needed in arena.cc line 65
   return bl;

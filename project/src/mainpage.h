@@ -1,3 +1,10 @@
+/**
+ * @file mainpage.h
+ *
+ * @copyright 2017 Angela Almquist
+ */
+#ifndef SRC_MAINPAGE_H_
+#define SRC_MAINPAGE_H_
 /*! \mainpage My Personal Index Page
  *
  * \section Interface
@@ -10,3 +17,4 @@
  * I have also made changes to arena.cc to accomidate the factory interface.
  *
  */
+#endif /* SRC_MAINPAGE_H_ */

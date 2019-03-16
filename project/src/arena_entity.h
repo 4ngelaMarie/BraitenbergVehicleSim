@@ -139,6 +139,7 @@ class ArenaEntity {
   void set_mobility(bool value) { is_mobile_ = value; }
 
   virtual void LoadFromObject(json_object& entity_config) {
+    // json_object& entity_config = *entity_config_ptr;
     set_position(
       entity_config["x"].get<double>(), entity_config["y"].get<double>());
     if (entity_config.find("theta") != entity_config.end()) {
@@ -160,4 +161,4 @@ class ArenaEntity {
 
 NAMESPACE_END(csci3081);
 
-#endif /* SRC_ARENA_ENTITY_H_ */
+#endif  // SRC_ARENA_ENTITY_H_

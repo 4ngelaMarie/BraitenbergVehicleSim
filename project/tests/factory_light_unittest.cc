@@ -23,58 +23,44 @@
  /******************************************************
 * TEST FEATURE SetUp
 *******************************************************/
-/*class FactoryLighttest : public ::testing::Test {
 
- protected:
-  virtual void SetUp() {
-    arena = new csci3081::Arena();
-  }
-  virtual void TearDown() {
-    delete arena;
-  }
-  csci3081::Arena * arena;
-};*/
 class FactoryLighttest : public ::testing::Test {
 
  protected:
   virtual void SetUp() {
     factory = new csci3081::FactoryLight();
+    std::string json = "{\"type\":\"Light\", \"x\":500,\"y\":350,\"r\":29}";
+    json_value* config_ = new json_value();
+    std::string err = parse_json(*config_, json);
+	json_object& entity_config = config_->get<json_object>();
+	//json_object* entity_config_ptr = &entity_config;
+	fl = factory->Create(entity_config);
   }
-  std::string json = "{\"type:\":\"Light\"\"x\":500,\"y\":350,\"r\":30}";
-  json_value* config_ = new json_value();
-  std::string err = parse_json(*config_, json);
-  csci3081::Light * fl = factory->Create(config_->get<json_object>());
 
   virtual void TearDown() {
     delete factory;
   }
   csci3081::FactoryLight * factory;
+  csci3081::Light * fl;
 };
 
 /*******************************************************************************
  * Test Cases
  ******************************************************************************/
 
-/*TEST_F(FactoryLighttest, Constructor) {
-  auto bv = new csci3081::FactoryLight(); //intialize a factory
-  auto light = bv->Create();
-  
-  csci3081::Pose position = light->get_pose();
-  int x = position.x;
-  int y = position.y;
-  EXPECT_EQ(x, 200);
-  EXPECT_EQ(y, 200);
-  
-  //EXPECT_EQ(light->get_color(), csci3081::kGreen);
-  EXPECT_EQ(light->get_type(), csci3081::kLight);
-  EXPECT_EQ(light->get_radius(), 30);
-  EXPECT_EQ(light->get_id(), csci3081::Light::count);
-  EXPECT_EQ(light->is_mobile(), true);
-  EXPECT_EQ(light->get_speed(), 3);
-};*/
 TEST_F(FactoryLighttest, Create) {
   EXPECT_EQ(fl->get_pose().x, 500);
   EXPECT_EQ(fl->get_pose().y, 350);
+  EXPECT_EQ(fl->get_type(), csci3081::kLight);
+  EXPECT_EQ(fl->get_radius(), 29);
+  EXPECT_EQ(fl->get_id(), csci3081::Light::count);
+  EXPECT_EQ(fl->is_mobile(), true);
+  EXPECT_EQ(fl->get_speed(), 3);
+  
+  csci3081::RgbColor color = fl->get_color();
+  EXPECT_EQ(color.r, 255);
+  EXPECT_EQ(color.g, 255);
+  EXPECT_EQ(color.b, 255);
 };
 
 

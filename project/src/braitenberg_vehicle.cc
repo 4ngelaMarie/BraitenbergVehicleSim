@@ -43,9 +43,10 @@ BraitenbergVehicle::BraitenbergVehicle() :
 
 void BraitenbergVehicle::TimestepUpdate(__unused unsigned int dt) {
   collision_counter++;
-  if (collision_counter % 21 == 0 && collision_counter < 25) {
-    collision_counter = 1;
-    set_heading(static_cast<int>((get_pose().theta + 45)) % 360);
+  if (collision_counter == 20) {
+    set_heading(static_cast<int>((get_pose().theta - 45)) % 360);
+  } else if (collision_counter == 100) {
+    collision_counter--;
   }
   if (is_moving()) {
     motion_behavior_->UpdatePose(dt, wheel_velocity_);
@@ -135,20 +136,20 @@ void BraitenbergVehicle::Update() {
     case kLove:
       set_color({0, 0, 255});
       light_wheel_velocity = WheelVelocity(
-        1.0/get_sensor_reading_left(closest_light_entity_),
-         1.0/get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
+        1.0/get_sensor_reading_left(closest_food_entity_),
+         1.0/get_sensor_reading_right(closest_food_entity_), defaultSpeed_);
       break;
     case kCoward:
       set_color({0, 0, 255});
       light_wheel_velocity = WheelVelocity(
-        get_sensor_reading_left(closest_light_entity_),
-         get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
+        get_sensor_reading_left(closest_food_entity_),
+         get_sensor_reading_right(closest_food_entity_), defaultSpeed_);
       break;
     case kAggressive:
       set_color({0, 0, 255});
       light_wheel_velocity = WheelVelocity(
-        get_sensor_reading_right(closest_light_entity_),
-         get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
+        get_sensor_reading_right(closest_food_entity_),
+         get_sensor_reading_left(closest_food_entity_), defaultSpeed_);
       break;
     case kNone:
     default:
@@ -213,8 +214,8 @@ void BraitenbergVehicle::UpdateLightSensors() {
 }
 
 void BraitenbergVehicle::LoadFromObject(json_object& entity_config) {
+  // json_object& entity_config = *entity_config_ptr;
   ArenaEntity::LoadFromObject(entity_config);
-
   if (entity_config.find("light_behavior") != entity_config.end()) {
       light_behavior_ = get_behavior_type(
         entity_config["light_behavior"].get<std::string>());

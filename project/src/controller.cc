@@ -99,5 +99,4 @@ void Controller::Reset() {
   viewer_->SetArena(arena_);
 }
 
-
 NAMESPACE_END(csci3081);

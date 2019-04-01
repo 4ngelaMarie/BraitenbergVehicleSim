@@ -157,8 +157,8 @@ class BraitenbergVehicle : public ArenaMobileEntity {
   WheelVelocity wheel_velocity_;
   Behavior light_behavior_;
   Behavior food_behavior_;
-  BehaviorEntity* light_behavior_ptr_;  // added these
-  BehaviorEntity* food_behavior_ptr_;
+  BehaviorEntity* light_behavior_ptr_;  // added
+  BehaviorEntity* food_behavior_ptr_;   // added
   const ArenaEntity* closest_light_entity_;
   const ArenaEntity* closest_food_entity_;
   double defaultSpeed_;

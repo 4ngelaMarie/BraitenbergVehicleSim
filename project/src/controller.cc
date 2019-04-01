@@ -32,7 +32,7 @@ Controller::Controller(int argc, char **argv) :
                    std::istreambuf_iterator<char>());
     std::string json = str;
     config_ = new json_value();
-    std::string err = parse_json(*config_, json);
+    std::string err = parse_json(config_, json);
     if (!err.empty()) {
       std::cerr << "Parse error: " << err << std::endl;
       delete config_;

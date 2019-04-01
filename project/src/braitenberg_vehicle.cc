@@ -31,7 +31,7 @@ int BraitenbergVehicle::count = 0;
 
 BraitenbergVehicle::BraitenbergVehicle() :
   light_sensors_(), wheel_velocity_(), light_behavior_(kNone),
-  food_behavior_(kNone), light_behavior_ptr_{new None()},
+  food_behavior_(kNone), light_behavior_ptr_{new None()},      //  added here
   food_behavior_ptr_{new None()}, closest_light_entity_(NULL),
   closest_food_entity_(NULL), defaultSpeed_(5.0) {
   set_type(kBraitenberg);
@@ -186,6 +186,8 @@ void BraitenbergVehicle::Update() {
     set_color(BRAITENBERG_COLOR);
     wheel_velocity_ = WheelVelocity(0, 0);
   }
+  delete food_wv_ptr;    //  added here
+  delete light_wv_ptr;	 //   added here
 }
 
 std::string BraitenbergVehicle::get_name() const {
@@ -237,10 +239,12 @@ void BraitenbergVehicle::LoadFromObject(json_object* entity_config_ptr) {
   if (entity_config.find("light_behavior") != entity_config.end()) {
       light_behavior_ = get_behavior_type(
         entity_config["light_behavior"].get<std::string>());
+        set_light_behavior(light_behavior_);
   }
   if (entity_config.find("food_behavior") != entity_config.end()) {
       food_behavior_ = get_behavior_type(
         entity_config["food_behavior"].get<std::string>());
+        set_food_behavior(food_behavior_);
   }
 
   UpdateLightSensors();

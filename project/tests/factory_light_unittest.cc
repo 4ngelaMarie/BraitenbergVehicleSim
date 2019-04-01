@@ -31,10 +31,10 @@ class FactoryLighttest : public ::testing::Test {
     factory = new csci3081::FactoryLight();
     std::string json = "{\"type\":\"Light\", \"x\":500,\"y\":350,\"r\":29}";
     json_value* config_ = new json_value();
-    std::string err = parse_json(*config_, json);
+    std::string err = parse_json(config_, json);
 	json_object& entity_config = config_->get<json_object>();
-	//json_object* entity_config_ptr = &entity_config;
-	fl = factory->Create(entity_config);
+	json_object* entity_config_ptr = &entity_config;
+	fl = factory->Create(entity_config_ptr);
   }
 
   virtual void TearDown() {

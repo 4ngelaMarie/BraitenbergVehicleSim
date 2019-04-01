@@ -32,10 +32,10 @@ class FactoryBraitenbergtest : public ::testing::Test {
     factory = new csci3081::FactoryBraitenberg();
     std::string json = "{\"type\":\"Braitenberg\", \"x\":270,\"y\":270,\"r\":15,\"theta\":215,\"light_behavior\":\"None\",\"food_behavior\":\"Explore\"}";
     json_value* config_ = new json_value();
-    std::string err = parse_json(*config_, json);
+    std::string err = parse_json(config_, json);
 	json_object& entity_config = config_->get<json_object>();
-	//json_object* entity_config_ptr = &entity_config;
-	bv = factory->Create(entity_config);
+	json_object* entity_config_ptr = &entity_config;
+	bv = factory->Create(entity_config_ptr);
   }
 
   virtual void TearDown() {

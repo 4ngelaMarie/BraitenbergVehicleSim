@@ -10,6 +10,11 @@
 #include <ctime>
 #include "src/braitenberg_vehicle.h"
 #include "src/params.h"
+#include "src/love.h"
+#include "src/none.h"
+#include "src/aggressive.h"
+#include "src/coward.h"
+#include "src/explore.h"
 
 class SensorLightLove;
 
@@ -26,7 +31,8 @@ int BraitenbergVehicle::count = 0;
 
 BraitenbergVehicle::BraitenbergVehicle() :
   light_sensors_(), wheel_velocity_(), light_behavior_(kNone),
-  food_behavior_(kNone), closest_light_entity_(NULL),
+  food_behavior_(kNone), light_behavior_ptr_{new None()},
+  food_behavior_ptr_{new None()}, closest_light_entity_(NULL),
   closest_food_entity_(NULL), defaultSpeed_(5.0) {
   set_type(kBraitenberg);
   motion_behavior_ = new MotionBehaviorDifferential(this);
@@ -89,10 +95,21 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
 }
 
 void BraitenbergVehicle::Update() {
-  WheelVelocity light_wheel_velocity = WheelVelocity(0, 0);
+  WheelVelocity* light_wv_ptr = new WheelVelocity();
+  WheelVelocity* food_wv_ptr = new WheelVelocity();
+  // WheelVelocity light_wheel_velocity = WheelVelocity(0, 0);
+  food_behavior_ptr_->getWheelVelocity(
+    get_sensor_reading_left(closest_food_entity_),
+    get_sensor_reading_right(closest_food_entity_),
+    defaultSpeed_, food_wv_ptr);
 
-  int numBehaviors = 2;
+  light_behavior_ptr_->getWheelVelocity(
+  get_sensor_reading_left(closest_food_entity_),
+  get_sensor_reading_right(closest_food_entity_),
+  defaultSpeed_, light_wv_ptr);
 
+
+/*
   switch (light_behavior_) {
     case kExplore:
       set_color({255, 204, 51});
@@ -123,7 +140,6 @@ void BraitenbergVehicle::Update() {
       numBehaviors--;
       break;
   }
-
   WheelVelocity food_wheel_velocity = WheelVelocity(0, 0);
 
   switch (food_behavior_) {
@@ -155,18 +171,19 @@ void BraitenbergVehicle::Update() {
     default:
       numBehaviors--;
       break;
-  }
+  } */
 
+  int numBehaviors = 2;    // FIGURE THIS PART OUT
   if (numBehaviors) {
     if (food_behavior_ && light_behavior_) {
       set_color(BRAITENBERG_COLOR);
     }
     wheel_velocity_ = WheelVelocity(
-      (light_wheel_velocity.left + food_wheel_velocity.left)/numBehaviors,
-      (light_wheel_velocity.right + food_wheel_velocity.right)/numBehaviors,
+      (light_wv_ptr->left + food_wv_ptr->left)/numBehaviors,
+      (light_wv_ptr->right + food_wv_ptr->right)/numBehaviors,
       defaultSpeed_);
   } else {
-	set_color(BRAITENBERG_COLOR);
+    set_color(BRAITENBERG_COLOR);
     wheel_velocity_ = WheelVelocity(0, 0);
   }
 }

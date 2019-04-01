@@ -38,7 +38,10 @@ Controller::Controller(int argc, char **argv) :
       delete config_;
       config_ = NULL;
     } else {
-       arena_ = new Arena(config_->get<json_object>());
+       json_object& entity_config = config_->get<json_object>();
+       json_object* entity_config_ptr = &entity_config;
+       // arena_ = new Arena(config_->get<json_object>());
+       arena_ = new Arena(entity_config_ptr);
     }
   }
   if (!config_) {
@@ -92,7 +95,10 @@ void Controller::Reset() {
     delete (arena_);
   }
   if (config_) {
-    arena_ = new Arena(config_->get<json_object>());
+    json_object& entity_config = config_->get<json_object>();
+    json_object* entity_config_ptr = &entity_config;
+    // arena_ = new Arena(config_->get<json_object>());
+    arena_ = new Arena(entity_config_ptr);
   } else {
     arena_ = new Arena();
   }

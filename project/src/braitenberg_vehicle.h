@@ -78,7 +78,7 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   void UpdateLightSensors();
 
-  void LoadFromObject(json_object& entity_config) override;
+  void LoadFromObject(json_object* entity_config) override;
 
   Behavior get_light_behavior() { return light_behavior_; }
 

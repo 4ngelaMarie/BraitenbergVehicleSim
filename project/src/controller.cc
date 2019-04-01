@@ -38,7 +38,7 @@ Controller::Controller(int argc, char **argv) :
       delete config_;
       config_ = NULL;
     } else {
-      arena_ = new Arena(config_->get<json_object>());
+       arena_ = new Arena(config_->get<json_object>());
     }
   }
   if (!config_) {

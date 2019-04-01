@@ -37,7 +37,7 @@ class FactoryLight: public FactoryEntity {
  public:
   FactoryLight() {}
   virtual ~FactoryLight() {}
-  Light * Create(json_object& config) override;
+  Light * Create(json_object* config) override;
 	  /**
    * @brief Under certain circumstance, the compiler requires that the
    * assignment operator is not defined. This `deletes` the default

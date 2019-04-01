@@ -36,14 +36,14 @@ Arena::Arena(): x_dim_(X_DIM),
     AddEntity(new BraitenbergVehicle());
 }
 
-Arena::Arena(json_object& arena_object): x_dim_(X_DIM),
+Arena::Arena(json_object* arena_object_ptr): x_dim_(X_DIM),
       y_dim_(Y_DIM),
       entities_(),
       mobile_entities_() {
   FactoryBraitenberg fb;
   FactoryLight fl;
   FactoryFood ff;
-  // json_object& arena_object = *arena_object_ptr;
+  json_object& arena_object = *arena_object_ptr;  //  here
   x_dim_ = arena_object["width"].get<double>();
   y_dim_ = arena_object["height"].get<double>();
   json_array& entities = arena_object["entities"].get<json_array>();

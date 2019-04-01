@@ -18,7 +18,13 @@
 #include "src/arena_mobile_entity.h"
 #include "src/motion_behavior_differential.h"
 #include "src/wheel_velocity.h"
-#include "src/behavior_enum.h"
+#include "src/behavior_enum.h"  // needed for arena_graphics buttons
+#include "src/behavior.h"
+#include "src/love.h"
+#include "src/none.h"
+#include "src/aggressive.h"
+#include "src/coward.h"
+#include "src/explore.h"
 
 
 /*******************************************************************************
@@ -82,11 +88,60 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   Behavior get_light_behavior() { return light_behavior_; }
 
-  void set_light_behavior(Behavior behavior) { light_behavior_ = behavior; }
+  // void set_light_behavior(Behavior behavior) { light_behavior_ = behavior; }
+  void set_light_behavior(Behavior behavior) {
+    light_behavior_ = behavior;
+    // delete last thing light was pointing to
+    delete light_behavior_ptr_;   // is this correct?
+    switch (light_behavior_) {
+      case kExplore:
+        light_behavior_ptr_ = new Explore();
+      break;
+      case kLove:
+        light_behavior_ptr_ = new Love();
+      break;
+      case kAggressive:
+        light_behavior_ptr_ = new Aggressive();
+      break;
+      case kNone:
+        light_behavior_ptr_ = new None();
+      break;
+      case kCoward:
+        light_behavior_ptr_ = new Coward();
+      break;
+      default:
+        light_behavior_ptr_ = new None();
+      break;
+    }
+  }
 
   Behavior get_food_behavior() { return food_behavior_; }
 
-  void set_food_behavior(Behavior behavior) { food_behavior_ = behavior; }
+  // void set_food_behavior(Behavior behavior) { food_behavior_ = behavior; }
+  void set_food_behavior(Behavior behavior) {
+    food_behavior_ = behavior;
+    delete food_behavior_ptr_;    // is this correct?
+    switch (food_behavior_) {
+      case kExplore:
+        food_behavior_ptr_ = new Explore();
+      break;
+      case kLove:
+        food_behavior_ptr_ = new Love();
+      break;
+      case kAggressive:
+        food_behavior_ptr_ = new Aggressive();
+      break;
+      case kNone:
+        food_behavior_ptr_ = new None();
+      break;
+      case kCoward:
+        food_behavior_ptr_ = new Coward();
+      break;
+      default:
+        food_behavior_ptr_ = new None();
+      break;
+    }
+  }
 
   double get_sensor_reading_left(const ArenaEntity* entity);
 
@@ -102,6 +157,8 @@ class BraitenbergVehicle : public ArenaMobileEntity {
   WheelVelocity wheel_velocity_;
   Behavior light_behavior_;
   Behavior food_behavior_;
+  BehaviorEntity* light_behavior_ptr_;  // added these
+  BehaviorEntity* food_behavior_ptr_;
   const ArenaEntity* closest_light_entity_;
   const ArenaEntity* closest_food_entity_;
   double defaultSpeed_;

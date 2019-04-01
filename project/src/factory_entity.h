@@ -36,7 +36,7 @@ class FactoryEntity {
  public :
     FactoryEntity() {}
     virtual ~FactoryEntity() {}
-    virtual ArenaEntity * Create(json_object& config) = 0;
+    virtual ArenaEntity * Create(json_object* config) = 0;
      /**
      * @brief Under certain circumstance, the compiler requires that the
      * assignment operator is not defined. This `deletes` the default

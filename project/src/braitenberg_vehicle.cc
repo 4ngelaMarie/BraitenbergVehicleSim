@@ -166,6 +166,7 @@ void BraitenbergVehicle::Update() {
       (light_wheel_velocity.right + food_wheel_velocity.right)/numBehaviors,
       defaultSpeed_);
   } else {
+	set_color(BRAITENBERG_COLOR);
     wheel_velocity_ = WheelVelocity(0, 0);
   }
 }
@@ -213,9 +214,9 @@ void BraitenbergVehicle::UpdateLightSensors() {
   }
 }
 
-void BraitenbergVehicle::LoadFromObject(json_object& entity_config) {
-  // json_object& entity_config = *entity_config_ptr;
-  ArenaEntity::LoadFromObject(entity_config);
+void BraitenbergVehicle::LoadFromObject(json_object* entity_config_ptr) {
+  json_object& entity_config = *entity_config_ptr;
+  ArenaEntity::LoadFromObject(entity_config_ptr);
   if (entity_config.find("light_behavior") != entity_config.end()) {
       light_behavior_ = get_behavior_type(
         entity_config["light_behavior"].get<std::string>());

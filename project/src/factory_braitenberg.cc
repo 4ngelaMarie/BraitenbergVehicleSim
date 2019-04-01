@@ -19,7 +19,7 @@ NAMESPACE_BEGIN(csci3081);
 /*******************************************************************************
  * Constructors/Destructor
  ******************************************************************************/
-BraitenbergVehicle * FactoryBraitenberg::Create(json_object& config) {
+BraitenbergVehicle * FactoryBraitenberg::Create(json_object* config) {
   BraitenbergVehicle *bv = new BraitenbergVehicle();
   bv->LoadFromObject(config);  // no longer needed in arena.cc line 65
   return bv;

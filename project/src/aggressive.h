@@ -35,8 +35,8 @@ NAMESPACE_BEGIN(csci3081);
 class Aggressive: public BehaviorEntity {
  public:
   Aggressive() {}
-  virtual ~Aggressive() {}
-  void getWheelVelocity(double rsr, double lsr, double speed,
+  ~Aggressive() {}
+  void getWheelVelocity(double lsr, double rsr, double speed,
    WheelVelocity* wv_ptr)override{
       *wv_ptr = WheelVelocity(1.0*rsr, 1.0*lsr, speed);
   };

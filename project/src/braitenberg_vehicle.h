@@ -88,10 +88,8 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   Behavior get_light_behavior() { return light_behavior_; }
 
-  // void set_light_behavior(Behavior behavior) { light_behavior_ = behavior; }
   void set_light_behavior(Behavior behavior) {
     light_behavior_ = behavior;
-    // delete last thing light was pointing to
     delete light_behavior_ptr_;   // is this correct?
     switch (light_behavior_) {
       case kExplore:
@@ -117,7 +115,6 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   Behavior get_food_behavior() { return food_behavior_; }
 
-  // void set_food_behavior(Behavior behavior) { food_behavior_ = behavior; }
   void set_food_behavior(Behavior behavior) {
     food_behavior_ = behavior;
     delete food_behavior_ptr_;    // is this correct?
@@ -143,6 +140,32 @@ class BraitenbergVehicle : public ArenaMobileEntity {
     }
   }
 
+  Behavior get_bv_behavior() { return bv_behavior_; }
+
+  void set_bv_behavior(Behavior behavior) {
+    bv_behavior_ = behavior;
+    delete bv_behavior_ptr_;    // is this correct?
+    switch (bv_behavior_) {
+      case kExplore:
+        bv_behavior_ptr_ = new Explore();
+      break;
+      case kLove:
+        bv_behavior_ptr_ = new Love();
+      break;
+      case kAggressive:
+        bv_behavior_ptr_ = new Aggressive();
+      break;
+      case kNone:
+        bv_behavior_ptr_ = new None();
+      break;
+      case kCoward:
+        bv_behavior_ptr_ = new Coward();
+      break;
+      default:
+        bv_behavior_ptr_ = new None();
+      break;
+    }
+  }
   double get_sensor_reading_left(const ArenaEntity* entity);
 
   double get_sensor_reading_right(const ArenaEntity* entity);
@@ -157,10 +180,13 @@ class BraitenbergVehicle : public ArenaMobileEntity {
   WheelVelocity wheel_velocity_;
   Behavior light_behavior_;
   Behavior food_behavior_;
+  Behavior bv_behavior_;
   BehaviorEntity* light_behavior_ptr_;  // added
   BehaviorEntity* food_behavior_ptr_;   // added
+  BehaviorEntity* bv_behavior_ptr_;     // added
   const ArenaEntity* closest_light_entity_;
   const ArenaEntity* closest_food_entity_;
+  const ArenaEntity* closest_bv_entity_;
   double defaultSpeed_;
 };
 

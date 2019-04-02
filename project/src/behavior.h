@@ -35,7 +35,7 @@ class BehaviorEntity {
  public :
     BehaviorEntity() {}
     virtual ~BehaviorEntity() {}
-    virtual void getWheelVelocity(double rsr, double lsr, double speed,
+    virtual void getWheelVelocity(double lsr, double rsr, double speed,
       WheelVelocity* wv_ptr) = 0;
      /**
      * @brief Under certain circumstance, the compiler requires that the

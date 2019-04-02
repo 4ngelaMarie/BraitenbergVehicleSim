@@ -15,60 +15,45 @@
 #include <gtest/gtest.h>
 #include "src/behavior.h"
 #include "src/wheel_velocity.h"
-#include "src/pose.h"
-#include "src/love.h"
+#include "src/explore.h"
 
 
  /******************************************************
 * TEST FEATURE SetUp
 *******************************************************/
 
-class Behaviortest : public ::testing::Test {
+class ExploreBehaviortest : public ::testing::Test {
 
  protected:
   virtual void SetUp() {
-    bLove = new csci3081::Love();
+    bExplore = new csci3081::Explore();
   }
 
   virtual void TearDown() {
-    delete bLove;
+    delete bExplore;
   }
-  csci3081::Love * bLove;
+  csci3081::Explore * bExplore;
 };
 
 /*******************************************************************************
  * Test Cases
  ******************************************************************************/
 
-TEST_F(Behaviortest, LoveBehavior) {
-  csci3081::WheelVelocity * wv_ptr = new csci3081::WheelVelocity();
-  bLove->getWheelVelocity(0, 0, 0, wv_ptr);
-  EXPECT_EQ(wv_ptr->left, 0);
-  EXPECT_EQ(wv_ptr->right, 0);
-};
-/*
-TEST_F(Behaviortest, AggressiveBehavior) {
-  csci3081::WheelVelocity * wv_ptr = new csci3081::WheelVelocity();
-  bAggressive->getWheelVelocity(0, 0, 0, wv_ptr);
-  EXPECT_EQ(wv_ptr->left, 0);
-  EXPECT_EQ(wv_ptr->right, 0);
-};
-
-TEST_F(Behaviortest, NoBehavior) {
-  csci3081::WheelVelocity * wv_ptr = new csci3081::WheelVelocity();
-  bNone->getWheelVelocity(0, 0, 0, wv_ptr);
-  EXPECT_EQ(wv_ptr->left, 0);
-  EXPECT_EQ(wv_ptr->right, 0);
-};
-TEST_F(Behaviortest, CowardBehavior) {
-  csci3081::WheelVelocity * wv_ptr = new csci3081::WheelVelocity();
-  bCoward->getWheelVelocity(0, 0, 0, wv_ptr);
-  EXPECT_EQ(wv_ptr->left, 0);
-  EXPECT_EQ(wv_ptr->right, 0);
-};
-TEST_F(Behaviortest, ExploreBehavior) {
+TEST_F(ExploreBehaviortest, ExploreBehavior) {
   csci3081::WheelVelocity * wv_ptr = new csci3081::WheelVelocity();
   bExplore->getWheelVelocity(0, 0, 0, wv_ptr);
-  EXPECT_EQ(wv_ptr->left, 0);
-  EXPECT_EQ(wv_ptr->right, 0);
-}; */
+  EXPECT_EQ(wv_ptr->left, 0) << "FAIL: speed exceeds maximum\n";
+  EXPECT_EQ(wv_ptr->right, 0) << "FAIL: speed exceeds maximum\n";
+  bExplore->getWheelVelocity(0, 0, 5.0, wv_ptr);
+  EXPECT_EQ(wv_ptr->left, 5.0) << "FAIL: speed exceeds maximum\n";
+  EXPECT_EQ(wv_ptr->right, 5.0) << "FAIL: speed exceeds maximum\n";
+  bExplore->getWheelVelocity(3.0, 4.0, 5.0, wv_ptr);
+  EXPECT_NEAR(wv_ptr->right, .33, .01)<< "FAIL: speed not updated correctly\n";
+  EXPECT_EQ(wv_ptr->left, .25)<< "FAIL: speed not updated correctly\n";
+  bExplore->getWheelVelocity(.01, 4.0, 50.0, wv_ptr);
+  EXPECT_EQ(wv_ptr->right, 50.0)<< "FAIL: speed exceeds maximum\n";
+  EXPECT_EQ(wv_ptr->left, .25)<< "FAIL: speed not updated correctly\n";
+  bExplore->getWheelVelocity(.1, .1, 5.0, wv_ptr);
+  EXPECT_EQ(wv_ptr->right, 5.0) << "FAIL: speed exceeds maximum\n";
+  EXPECT_EQ(wv_ptr->left, 5.0) << "FAIL: speed exceeds maximum\n"; 
+}; 

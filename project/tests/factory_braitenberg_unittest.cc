@@ -30,7 +30,7 @@ class FactoryBraitenbergtest : public ::testing::Test {
  protected:
   virtual void SetUp() {
     factory = new csci3081::FactoryBraitenberg();
-    std::string json = "{\"type\":\"Braitenberg\", \"x\":270,\"y\":270,\"r\":15,\"theta\":215,\"light_behavior\":\"None\",\"food_behavior\":\"Explore\"}";
+    std::string json = "{\"type\":\"Braitenberg\", \"x\":270,\"y\":270,\"r\":15,\"theta\":215,\"light_behavior\":\"None\",\"food_behavior\":\"Explore\",\"bv_behavior\":\"None\"}";
     json_value* config_ = new json_value();
     std::string err = parse_json(config_, json);
 	json_object& entity_config = config_->get<json_object>();
@@ -59,6 +59,7 @@ TEST_F(FactoryBraitenbergtest, Create) {
  
   EXPECT_EQ(bv->get_light_behavior(), csci3081::kNone);
   EXPECT_EQ(bv->get_food_behavior(), csci3081::kExplore);
+  EXPECT_EQ(bv->get_bv_behavior(), csci3081::kNone);
   
   std::vector<csci3081::Pose> light_sensors = bv->get_light_sensors();
   double sensor_left = 1800.0/std::pow(

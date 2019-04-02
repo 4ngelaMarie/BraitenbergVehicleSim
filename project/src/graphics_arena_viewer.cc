@@ -295,6 +295,28 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
   space->setVisible(false);
   sliderPanel->setVisible(false);
 
+  robotWidgets.push_back(new nanogui::Label(
+    panel, "Braitenberg Behavior", "sans-bold"));
+  robotPanel = new nanogui::Widget(panel);
+  robotWidgets.push_back(robotPanel);
+  robotPanel->setLayout(new nanogui::BoxLayout(
+    nanogui::Orientation::Vertical, nanogui::Alignment::Minimum, 0, 0));
+  nanogui::ComboBox* BVBehaviorSelect = new nanogui::ComboBox(
+    robotPanel, behaviorNames);
+  BVBehaviorSelect->setFixedWidth(COMBO_BOX_WIDTH -10);
+  space = new nanogui::Widget(robotPanel);
+  sliderPanel = new nanogui::Widget(robotPanel);
+  space->setFixedHeight(10);
+  sliderPanel->setLayout(
+    new nanogui::BoxLayout(
+      nanogui::Orientation::Horizontal, nanogui::Alignment::Middle, 0, 0));
+  lbl = new nanogui::Label(sliderPanel, "Intensity", "sans-bold");
+  lbl->setFixedWidth(50);
+  slider = new nanogui::Slider(sliderPanel);
+  slider->setFixedWidth(90);
+  space->setVisible(false);
+  sliderPanel->setVisible(false);
+
   for (unsigned int f = 0; f < robotWidgets.size(); f++) {
     robotWidgets[f]->setVisible(defaultEntity->get_type() == kBraitenberg);
   }
@@ -304,6 +326,8 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
       static_cast<BraitenbergVehicle*>(defaultEntity)->get_light_behavior());
     foodBehaviorSelect->setSelectedIndex(
       static_cast<BraitenbergVehicle*>(defaultEntity)->get_food_behavior());
+    BVBehaviorSelect->setSelectedIndex(
+      static_cast<BraitenbergVehicle*>(defaultEntity)->get_bv_behavior());
   }
 
   entitySelect->setCallback(
@@ -348,6 +372,16 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
       this->arena_->get_entities()[entitySelect->selectedIndex()];
       if (entity->get_type() == kBraitenberg) {
         static_cast<BraitenbergVehicle*>(entity)->set_food_behavior(
+          static_cast<Behavior>(index));
+      }
+    });
+
+  BVBehaviorSelect->setCallback(                   // ADDED
+    [this, entitySelect](int index) {
+      ArenaEntity* entity =
+      this->arena_->get_entities()[entitySelect->selectedIndex()];
+      if (entity->get_type() == kBraitenberg) {
+        static_cast<BraitenbergVehicle*>(entity)->set_bv_behavior(
           static_cast<Behavior>(index));
       }
     });

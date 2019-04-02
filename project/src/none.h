@@ -35,8 +35,8 @@ NAMESPACE_BEGIN(csci3081);
 class None: public BehaviorEntity {
  public:
   None() {}
-  virtual ~None() {}
-  void getWheelVelocity(double rsr, double lsr, double speed,
+  ~None() {}
+  void getWheelVelocity(double lsr, double rsr, double speed,
     WheelVelocity* wv_ptr) override{
         rsr = 0.0;
         lsr = 0.0;

@@ -37,10 +37,10 @@ class FactoryFoodtest : public ::testing::Test {
     factory = new csci3081::FactoryFood();
     std::string json = "{\"type\": \"Food\", \"x\":100, \"y\":100, \"r\":20, \"theta\": 0.0}";
 	json_value* config_ = new json_value();
-	std::string err = parse_json(*config_, json);
+	std::string err = parse_json(config_, json);
 	json_object& entity_config = config_->get<json_object>();
-	//json_object* entity_config_ptr = &entity_config;
-	ff = factory->Create(entity_config);
+	json_object* entity_config_ptr = &entity_config;
+	ff = factory->Create(entity_config_ptr);
   }
   
   virtual void TearDown() {

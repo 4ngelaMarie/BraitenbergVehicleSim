@@ -31,9 +31,11 @@ int BraitenbergVehicle::count = 0;
 
 BraitenbergVehicle::BraitenbergVehicle() :
   light_sensors_(), wheel_velocity_(), light_behavior_(kNone),
-  food_behavior_(kNone), light_behavior_ptr_{new None()},
-  food_behavior_ptr_{new None()}, closest_light_entity_(NULL),
-  closest_food_entity_(NULL), defaultSpeed_(5.0) {
+  food_behavior_(kNone), bv_behavior_(kNone),
+  light_behavior_ptr_{new None()}, food_behavior_ptr_{new None()},
+  bv_behavior_ptr_{new None()}, closest_light_entity_(NULL),
+  closest_food_entity_(NULL), closest_bv_entity_(NULL),
+  defaultSpeed_(5.0) {
   set_type(kBraitenberg);
   motion_behavior_ = new MotionBehaviorDifferential(this);
   light_sensors_.push_back(Pose());
@@ -72,7 +74,11 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
     closest_entity_ = &closest_light_entity_;
   } else if (entity.get_type() == kFood) {
     closest_entity_ = &closest_food_entity_;
-  }
+  } else if (entity.get_type() == kBraitenberg) {
+      if (entity.get_id() != this->get_id()) {
+        closest_entity_ = &closest_bv_entity_;
+      }
+    }
 
   if (!closest_entity_) {
     return;
@@ -97,95 +103,38 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
 void BraitenbergVehicle::Update() {
   WheelVelocity* light_wv_ptr = new WheelVelocity();
   WheelVelocity* food_wv_ptr = new WheelVelocity();
-  // WheelVelocity light_wheel_velocity = WheelVelocity(0, 0);
+  WheelVelocity* bv_wv_ptr = new WheelVelocity();
   food_behavior_ptr_->getWheelVelocity(
     get_sensor_reading_left(closest_food_entity_),
     get_sensor_reading_right(closest_food_entity_),
     defaultSpeed_, food_wv_ptr);
 
   light_behavior_ptr_->getWheelVelocity(
-  get_sensor_reading_left(closest_food_entity_),
-  get_sensor_reading_right(closest_food_entity_),
-  defaultSpeed_, light_wv_ptr);
+    get_sensor_reading_left(closest_light_entity_),
+    get_sensor_reading_right(closest_light_entity_),
+    defaultSpeed_, light_wv_ptr);
 
+  bv_behavior_ptr_->getWheelVelocity(
+    get_sensor_reading_left(closest_bv_entity_),
+    get_sensor_reading_right(closest_bv_entity_),
+    defaultSpeed_, bv_wv_ptr);
 
-/*
-  switch (light_behavior_) {
-    case kExplore:
-      set_color({255, 204, 51});
-      light_wheel_velocity = WheelVelocity(
-        1.0/get_sensor_reading_right(closest_light_entity_),
-         1.0/get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
-      break;
-    case kLove:
-      set_color({255, 204, 51});
-      light_wheel_velocity = WheelVelocity(
-        1.0/get_sensor_reading_left(closest_light_entity_),
-         1.0/get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
-      break;
-    case kCoward:
-      set_color({255, 204, 51});
-      light_wheel_velocity = WheelVelocity(
-        get_sensor_reading_left(closest_light_entity_),
-         get_sensor_reading_right(closest_light_entity_), defaultSpeed_);
-      break;
-    case kAggressive:
-      set_color({255, 204, 51});
-      light_wheel_velocity = WheelVelocity(
-        get_sensor_reading_right(closest_light_entity_),
-         get_sensor_reading_left(closest_light_entity_), defaultSpeed_);
-      break;
-    case kNone:
-    default:
-      numBehaviors--;
-      break;
-  }
-  WheelVelocity food_wheel_velocity = WheelVelocity(0, 0);
-
-  switch (food_behavior_) {
-    case kExplore:
-      set_color({0, 0, 255});
-      food_wheel_velocity = WheelVelocity(
-        1.0/get_sensor_reading_right(closest_food_entity_),
-        1.0/get_sensor_reading_left(closest_food_entity_), defaultSpeed_);
-      break;
-    case kLove:
-      set_color({0, 0, 255});
-      light_wheel_velocity = WheelVelocity(
-        1.0/get_sensor_reading_left(closest_food_entity_),
-         1.0/get_sensor_reading_right(closest_food_entity_), defaultSpeed_);
-      break;
-    case kCoward:
-      set_color({0, 0, 255});
-      light_wheel_velocity = WheelVelocity(
-        get_sensor_reading_left(closest_food_entity_),
-         get_sensor_reading_right(closest_food_entity_), defaultSpeed_);
-      break;
-    case kAggressive:
-      set_color({0, 0, 255});
-      light_wheel_velocity = WheelVelocity(
-        get_sensor_reading_right(closest_food_entity_),
-         get_sensor_reading_left(closest_food_entity_), defaultSpeed_);
-      break;
-    case kNone:
-    default:
-      numBehaviors--;
-      break;
-  } */
-
-  int numBehaviors = 2;    // FIGURE THIS PART OUT
+  int numBehaviors = 3;    // FIGURE THIS PART OUT
   if (numBehaviors) {
     if (food_behavior_ && light_behavior_) {
       set_color(BRAITENBERG_COLOR);
     }
     wheel_velocity_ = WheelVelocity(
-      (light_wv_ptr->left + food_wv_ptr->left)/numBehaviors,
-      (light_wv_ptr->right + food_wv_ptr->right)/numBehaviors,
-      defaultSpeed_);
-  } else {
+      (light_wv_ptr->left + food_wv_ptr->left + bv_wv_ptr->left)
+       /numBehaviors,
+      (light_wv_ptr->right + food_wv_ptr->right + bv_wv_ptr->right)
+      /numBehaviors, defaultSpeed_); } else {
     set_color(BRAITENBERG_COLOR);
     wheel_velocity_ = WheelVelocity(0, 0);
   }
+  delete food_wv_ptr;    //  added here
+  delete light_wv_ptr;   //   added here
+  delete bv_wv_ptr;      //   added here
 }
 
 std::string BraitenbergVehicle::get_name() const {
@@ -237,12 +186,18 @@ void BraitenbergVehicle::LoadFromObject(json_object* entity_config_ptr) {
   if (entity_config.find("light_behavior") != entity_config.end()) {
       light_behavior_ = get_behavior_type(
         entity_config["light_behavior"].get<std::string>());
+        set_light_behavior(light_behavior_);
   }
   if (entity_config.find("food_behavior") != entity_config.end()) {
       food_behavior_ = get_behavior_type(
         entity_config["food_behavior"].get<std::string>());
+        set_food_behavior(food_behavior_);
   }
-
+  if (entity_config.find("bv_behavior") != entity_config.end()) {
+      bv_behavior_ = get_behavior_type(
+        entity_config["bv_behavior"].get<std::string>());
+        set_bv_behavior(bv_behavior_);
+  }
   UpdateLightSensors();
 }
 

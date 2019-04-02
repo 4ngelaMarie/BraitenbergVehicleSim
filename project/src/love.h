@@ -35,8 +35,8 @@ NAMESPACE_BEGIN(csci3081);
 class Love: public BehaviorEntity {
  public:
   Love() {}
-  virtual ~Love() {}
-  void getWheelVelocity(double rsr, double lsr, double speed,
+  ~Love() {}
+  void getWheelVelocity(double lsr, double rsr, double speed,
     WheelVelocity* wv_ptr) override{
       *wv_ptr = WheelVelocity(1.0/lsr, 1.0/rsr, speed);
   };

@@ -119,9 +119,22 @@ void BraitenbergVehicle::Update() {
     get_sensor_reading_right(closest_bv_entity_),
     defaultSpeed_, bv_wv_ptr);
 
-  int numBehaviors = 3;    // FIGURE THIS PART OUT
+  int numBehaviors = 3;
+  if (food_behavior_ == kNone) {
+    numBehaviors--;
+  } else {
+    set_color({0, 0, 255});
+  }
+  if (light_behavior_ == kNone) {
+    numBehaviors--;
+  } else {
+  set_color({255, 204, 51});
+  }
+  if (bv_behavior_ == kNone) {
+    numBehaviors--;
+  }
   if (numBehaviors) {
-    if (food_behavior_ && light_behavior_) {
+    if (numBehaviors > 1) {
       set_color(BRAITENBERG_COLOR);
     }
     wheel_velocity_ = WheelVelocity(

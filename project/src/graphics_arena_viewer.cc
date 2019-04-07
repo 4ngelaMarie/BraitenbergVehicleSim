@@ -14,6 +14,7 @@
 #include "src/graphics_arena_viewer.h"
 #include "src/rgb_color.h"
 #include "src/braitenberg_vehicle.h"
+#include "src/predator.h"
 
 /*******************************************************************************
  * Namespaces
@@ -155,7 +156,7 @@ void GraphicsArenaViewer::DrawEntity(NVGcontext *ctx,
   nvgSave(ctx);
   // draw the sensors if the entity is a BraitenbergVehicle
   // the nvg calls are porobably not perfect, but we haven't been taught them
-  /************************* DRAWING SENSORS *********************************/
+  /********************** DRAWING BV SENSORS ***************************/
   if (entity->get_type() == kBraitenberg) {
     auto bv = static_cast<const BraitenbergVehicle * const>(entity);
     std::vector<Pose> sensors = bv->get_light_sensors_const();
@@ -191,7 +192,44 @@ void GraphicsArenaViewer::DrawEntity(NVGcontext *ctx,
     nvgRestore(ctx);
     nvgFillColor(ctx, nvgRGBA(0, 0, 0, 255));
   }
-  /*********************** END DRAWING SENSORS *******************************/
+  /******************* END DRAWING BV SENSORS ***************************/
+  /****************** DRAWING PREDATOR SENSORS **************************/
+  if (entity->get_type() == kPredator) {
+    auto p = static_cast<const Predator * const>(entity);
+    std::vector<Pose> sensors = p->get_light_sensors_const();
+    Pose left_sens_pose = sensors[0];
+    Pose right_sens_pose = sensors[1];
+    // left sensor drawing save the ctx twice, once for the circle and
+    // once for the text
+    nvgSave(ctx);
+    nvgSave(ctx);
+    nvgBeginPath(ctx);
+    nvgCircle(ctx,
+            xOffset_ + static_cast<float>(left_sens_pose.x),
+            static_cast<float>(left_sens_pose.y),
+            static_cast<float>(SENSOR_LIGHT_RAD));
+    nvgFillColor(ctx, nvgRGBA(255, 0, 0, 255));
+    nvgFill(ctx);
+    nvgStrokeColor(ctx, nvgRGBA(0, 0, 0, 255));
+    nvgStroke(ctx);
+    nvgRestore(ctx);
+    nvgFillColor(ctx, nvgRGBA(0, 0, 0, 255));
+    nvgRestore(ctx);
+    nvgSave(ctx);
+    nvgBeginPath(ctx);
+    // right sensor drawing
+    nvgCircle(ctx,
+            xOffset_ + static_cast<float>(right_sens_pose.x),
+            static_cast<float>(right_sens_pose.y),
+            static_cast<float>(SENSOR_LIGHT_RAD));
+    nvgFillColor(ctx, nvgRGBA(255, 0, 0, 255));
+    nvgFill(ctx);
+    nvgStrokeColor(ctx, nvgRGBA(0, 0, 0, 255));
+    nvgStroke(ctx);
+    nvgRestore(ctx);
+    nvgFillColor(ctx, nvgRGBA(0, 0, 0, 255));
+  }
+  /****************** END DRAWING PREDATOR SENSORS ********************/
   nvgRestore(ctx);
   // light id text label
   nvgFillColor(ctx, nvgRGBA(0, 0, 0, 255));
@@ -332,7 +370,7 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
 
   entitySelect->setCallback(
     [this, isMobile, robotWidgets, lightBehaviorSelect,
-    foodBehaviorSelect](int index) {
+    foodBehaviorSelect, BVBehaviorSelect](int index) {  // ADDED HERE
       ArenaEntity* entity = this->arena_->get_entities()[index];
       if (entity->is_mobile()) {
         ArenaMobileEntity* mobileEntity =
@@ -351,6 +389,8 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
           static_cast<BraitenbergVehicle*>(entity)->get_light_behavior());
         foodBehaviorSelect->setSelectedIndex(
           static_cast<BraitenbergVehicle*>(entity)->get_food_behavior());
+        BVBehaviorSelect->setSelectedIndex(   // ADDED HERE
+          static_cast<BraitenbergVehicle*>(entity)->get_bv_behavior());
       }
 
       screen()->performLayout();

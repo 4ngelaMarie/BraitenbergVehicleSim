@@ -17,6 +17,7 @@
 #include "src/factory_light.h"
 #include "src/factory_food.h"
 #include "src/factory_braitenberg.h"
+#include "src/factory_predator.h"
 
 /*******************************************************************************
  * Namespaces
@@ -34,6 +35,7 @@ Arena::Arena(): x_dim_(X_DIM),
     AddEntity(new Light());
     AddEntity(new Food());
     AddEntity(new BraitenbergVehicle());
+    AddEntity(new Predator());
 }
 
 Arena::Arena(json_object* arena_object_ptr): x_dim_(X_DIM),
@@ -43,6 +45,7 @@ Arena::Arena(json_object* arena_object_ptr): x_dim_(X_DIM),
   FactoryBraitenberg fb;
   FactoryLight fl;
   FactoryFood ff;
+  FactoryPredator fp;
   json_object& arena_object = *arena_object_ptr;  //  here
   x_dim_ = arena_object["width"].get<double>();
   y_dim_ = arena_object["height"].get<double>();
@@ -63,6 +66,9 @@ Arena::Arena(json_object* arena_object_ptr): x_dim_(X_DIM),
         break;
       case (kBraitenberg):
         entity = fb.Create(entity_config_ptr);
+        break;
+      case (kPredator):
+        entity = fp.Create(entity_config_ptr);
         break;
       default:
         std::cout << "FATAL: Bad entity type on creation" << std::endl;
@@ -145,17 +151,26 @@ void Arena::UpdateEntitiesTimestep() {
         // this is pretty ugly, I should move it into HandleCollision
         if (ent1->get_type() == kBraitenberg &&
             ent2->get_type() == kFood) {
-              AdjustEntityOverlap(ent1, ent2);  //  ADDED HERE
+              AdjustEntityOverlap(ent1, ent2);  //  continue collide
           // static_cast<BraitenbergVehicle*>(ent1)->ConsumeFood();
         } else if (ent1->get_type() == kFood &&
                    ent2->get_type() == kBraitenberg) {
-              AdjustEntityOverlap(ent1, ent2);  //  ADDED HERE
+              AdjustEntityOverlap(ent1, ent2);  //  continue collide
           // static_cast<BraitenbergVehicle*>(ent2)->ConsumeFood();
         }
+    /*    if (ent1->get_type() == kBraitenberg &&
+            ent2->get_type() == kPredator) {
+              AdjustEntityOverlap(ent1, ent2);  //  ADDED HERE
+        } else if (ent1->get_type() == kPredator &&
+                   ent2->get_type() == kBraitenberg) {
+              AdjustEntityOverlap(ent1, ent2);  //  ADDED HERE
+        } */
         // lights and braitenberg vehicles do not collide
         // nothing collides with food, but bv's call consume() if they do
         if ((ent2->get_type() == kBraitenberg && ent1->get_type() == kLight) ||
             (ent2->get_type() == kLight && ent1->get_type() == kBraitenberg) ||
+            (ent2->get_type() == kBraitenberg && ent1->get_type() == kGhost) ||
+            (ent2->get_type() == kGhost && ent1->get_type() == kBraitenberg) ||
             (ent2->get_type() == kFood) || (ent1->get_type() == kFood)     ) {
           continue;
         }
@@ -163,7 +178,6 @@ void Arena::UpdateEntitiesTimestep() {
         ent1->HandleCollision(ent2->get_type(), ent2);
       }
     }
-
     if (ent1->get_type() == kBraitenberg) {
       BraitenbergVehicle* bv = static_cast<BraitenbergVehicle*>(ent1);
       for (unsigned int f = 0; f < entities_.size(); f++) {
@@ -171,6 +185,13 @@ void Arena::UpdateEntitiesTimestep() {
       }
 
       bv->Update();
+    } else if (ent1->get_type() == kPredator) {
+      Predator* fp = static_cast<Predator*>(ent1);
+      for (unsigned int f = 0; f < entities_.size(); f++) {
+        fp->SenseEntity(*entities_[f]);
+      }
+
+      fp->Update();
     }
   }
 }  // UpdateEntitiesTimestep()

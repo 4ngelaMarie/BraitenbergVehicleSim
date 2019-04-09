@@ -158,13 +158,6 @@ void Arena::UpdateEntitiesTimestep() {
               AdjustEntityOverlap(ent1, ent2);  //  continue collide
           // static_cast<BraitenbergVehicle*>(ent2)->ConsumeFood();
         }
-    /*    if (ent1->get_type() == kBraitenberg &&
-            ent2->get_type() == kPredator) {
-              AdjustEntityOverlap(ent1, ent2);  //  ADDED HERE
-        } else if (ent1->get_type() == kPredator &&
-                   ent2->get_type() == kBraitenberg) {
-              AdjustEntityOverlap(ent1, ent2);  //  ADDED HERE
-        } */
         // lights and braitenberg vehicles do not collide
         // nothing collides with food, but bv's call consume() if they do
         if ((ent2->get_type() == kBraitenberg && ent1->get_type() == kLight) ||

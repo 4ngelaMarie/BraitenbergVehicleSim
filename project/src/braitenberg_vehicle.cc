@@ -17,6 +17,7 @@
 #include "src/explore.h"
 
 class SensorLightLove;
+//  class GraphicsArenaViewer;
 
 /*******************************************************************************
  * Namespaces
@@ -105,7 +106,11 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
     *closest_entity_ = NULL;
   }
 }
-
+/*void BraitenbergVehicle::Notify(GraphicsArenaViewer* gav_observer, 
+WheelVelocity* light_wv_ptr, WheelVelocity* food_wv_ptr, 
+WheelVelocity* bv_wv_ptr){
+  gav_observer->SomeFunction(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
+} */
 void BraitenbergVehicle::Update() {
   WheelVelocity* light_wv_ptr = new WheelVelocity();
   WheelVelocity* food_wv_ptr = new WheelVelocity();
@@ -124,6 +129,9 @@ void BraitenbergVehicle::Update() {
     get_sensor_reading_left(closest_bv_entity_),
     get_sensor_reading_right(closest_bv_entity_),
     defaultSpeed_, bv_wv_ptr);
+//  need this to be conditional
+//  BraitenbergVehicle::Notify(gav_observer, light_wv_ptr,
+//   food_wv_ptr, bv_wv_ptr);
 
   int numBehaviors = 3;
   if (food_behavior_ == kNone) {

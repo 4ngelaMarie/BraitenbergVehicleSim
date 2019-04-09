@@ -235,6 +235,8 @@ class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer {
   void DrawEntity(NVGcontext *ctx, const class ArenaEntity *const entity);
 
   void AddEntityPanel(nanogui::Widget * panel);
+  void SomeFunction(WheelVelocity* light_wv_ptr,
+    WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr);
 
   bool RunViewer() override;
 

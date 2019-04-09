@@ -17,6 +17,7 @@
 #include "src/common.h"
 #include "src/arena_mobile_entity.h"
 #include "src/motion_behavior_differential.h"
+
 #include "src/wheel_velocity.h"
 #include "src/behavior_enum.h"  // needed for arena_graphics buttons
 #include "src/behavior.h"
@@ -166,6 +167,8 @@ class BraitenbergVehicle : public ArenaMobileEntity {
       break;
     }
   }
+/*  void Notify(WheelVelocity* light_wv_ptr, 
+    WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr); */
   double get_sensor_reading_left(const ArenaEntity* entity);
 
   double get_sensor_reading_right(const ArenaEntity* entity);
@@ -174,6 +177,7 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   int collision_counter = 1;
 
+//  GraphicsArenaViewer* gav_observer = NULL;
  private:
   std::vector<Pose> light_sensors_;
   MotionBehaviorDifferential * motion_behavior_{nullptr};

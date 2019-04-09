@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 #include "src/graphics_arena_viewer.h"
 #include "src/rgb_color.h"
@@ -24,11 +25,17 @@ NAMESPACE_BEGIN(csci3081);
 /*******************************************************************************
  * Constructors/Destructor
  ******************************************************************************/
+nanogui::TextBox* light_value_left_;
+nanogui::TextBox* light_value_right_;
+nanogui::TextBox* food_value_left_;
+nanogui::TextBox* food_value_right_;
+nanogui::TextBox* bv_value_left_;
+nanogui::TextBox* bv_value_right_;
 GraphicsArenaViewer::GraphicsArenaViewer(
     int width, int height,
     Controller * controller) :
     GraphicsApp(
-        width + GUI_MENU_WIDTH + GUI_MENU_GAP * 2,
+        width + (GUI_MENU_WIDTH*1.25) + GUI_MENU_GAP * 2,
         height,
         "Robot Simulation"),
     controller_(controller),
@@ -37,7 +44,7 @@ GraphicsArenaViewer::GraphicsArenaViewer(
     nanogui_intialized_(false),
     gui(nullptr),
     window() {
-      xOffset_ = GUI_MENU_WIDTH + GUI_MENU_GAP;
+      xOffset_ = (GUI_MENU_WIDTH*1.25) + GUI_MENU_GAP;
 }
 
 void GraphicsArenaViewer::InitNanoGUI() {
@@ -53,7 +60,7 @@ void GraphicsArenaViewer::InitNanoGUI() {
               // - GUI_MENU_WIDTH - GUI_MENU_GAP * 2, 0),
               Eigen::Vector2i(0, 0),
               "Menu");
-    window->setFixedWidth(GUI_MENU_WIDTH);
+    window->setFixedWidth(GUI_MENU_WIDTH*1.25);
     window->setLayout(new nanogui::GroupLayout());
 
     // Creating a panel impacts the layout. Widgets, sliders, buttons can be
@@ -70,8 +77,8 @@ void GraphicsArenaViewer::InitNanoGUI() {
     panel->setLayout(new nanogui::BoxLayout(
       nanogui::Orientation::Vertical, nanogui::Alignment::Middle, 0, 0));
     // Lays out all the components with "15" units of inbetween spacing
-    // panel->setLayout(new nanogui::BoxLayout(
-    //  nanogui::Orientation::Vertical,nanogui::Alignment::Middle, 0, 15));
+     //  panel->setLayout(new nanogui::BoxLayout(
+     //  nanogui::Orientation::Vertical,nanogui::Alignment::Middle, 0, 15));
 
     new nanogui::Label(window, "Game Control", "sans-bold");
     playing_button_ =
@@ -355,6 +362,58 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
   space->setVisible(false);
   sliderPanel->setVisible(false);
 
+/************* BEGIN TEXTBOX GRAPHICS **************/
+  robotWidgets.push_back(new nanogui::Label(
+    panel, "Wheel Velocities", "sans-bold"));
+  nanogui::Widget* grid = new nanogui::Widget(panel);
+  // A grid with 3 columns
+  grid->setLayout(
+    new nanogui::GridLayout(nanogui::Orientation::Horizontal, 3,
+    nanogui::Alignment::Middle, /*int margin = */0, /*int spacing = */0));
+  robotWidgets.push_back(grid);
+
+  // Columns Headers Row
+  // Notice that it is assigning these items to grid locations row by row
+  new nanogui::Label(grid, "", "sans-bold");
+  new nanogui::Label(grid, "Left", "sans-bold");
+  new nanogui::Label(grid, "Right", "sans-bold");
+
+  // Next Row for wheel velocities from light behavior
+  new nanogui::Label(grid, "Light", "sans-bold");
+  light_value_left_ = new nanogui::TextBox(grid, "0.0");
+  light_value_left_->setFixedWidth(75);
+  light_value_right_ = new nanogui::TextBox(grid, "0.0");
+  light_value_right_->setFixedWidth(75);
+  new nanogui::Label(grid, "Food", "sans-bold");
+  food_value_left_ = new nanogui::TextBox(grid, "0.0");
+  food_value_left_->setFixedWidth(75);
+  food_value_right_ = new nanogui::TextBox(grid, "0.0");
+  food_value_right_->setFixedWidth(75);
+  new nanogui::Label(grid, "Robot", "sans-bold");
+  bv_value_left_ = new nanogui::TextBox(grid, "0.0");
+  bv_value_left_->setFixedWidth(75);
+  bv_value_right_ = new nanogui::TextBox(grid, "0.0");
+  bv_value_right_->setFixedWidth(75);
+  // Save these text boxes so they can be filled with values in real-time
+  // Using the observer pattern
+ /* my_velocity_container_light_.StoreBoxes(
+    light_value_left_, light_value_right_);*/
+
+  entitySelect->setCallback(
+    [this, isMobile, robotWidgets, lightBehaviorSelect,
+    foodBehaviorSelect, BVBehaviorSelect](int index) {
+      if (index > 0/* Already observing a robot */) {
+        // Unsubscribe from that one
+        // ArenaEntity* entity = arena_get_entities()[index];
+       // bv_value_left_->setValue("1.0");
+      }
+      // ...
+    /*  if (entity->get_type() == kBraitenberg) {
+        // ...
+        // Subscribe to observe this one
+      } */
+  });
+/************** END TEXTBOX GRAPHICS ***************/
   for (unsigned int f = 0; f < robotWidgets.size(); f++) {
     robotWidgets[f]->setVisible(defaultEntity->get_type() == kBraitenberg);
   }
@@ -370,7 +429,7 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
 
   entitySelect->setCallback(
     [this, isMobile, robotWidgets, lightBehaviorSelect,
-    foodBehaviorSelect, BVBehaviorSelect](int index) {  // ADDED HERE
+    foodBehaviorSelect, BVBehaviorSelect] (int index) {
       ArenaEntity* entity = this->arena_->get_entities()[index];
       if (entity->is_mobile()) {
         ArenaMobileEntity* mobileEntity =
@@ -385,6 +444,7 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
       }
 
       if (entity->get_type() == kBraitenberg) {
+//  static_cast<BraitenbergVehicle*>(entity)->gav_observer = *this;
         lightBehaviorSelect->setSelectedIndex(
           static_cast<BraitenbergVehicle*>(entity)->get_light_behavior());
         foodBehaviorSelect->setSelectedIndex(
@@ -435,6 +495,40 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
     });
 }
 
+// EXAMPLE of setting the value to be displayed in the velocity grid
+void GraphicsArenaViewer::SomeFunction(WheelVelocity* light_wv_ptr,
+  WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) {
+int i = light_wv_ptr->left;
+  std::string out_string;
+  std::stringstream ss;
+  ss << i;
+  out_string = ss.str();
+  light_value_left_->setValue(out_string);
+  i = light_wv_ptr->right;
+  ss <<i;
+  out_string == ss.str();
+  light_value_right_->setValue(out_string);
+  i = food_wv_ptr->left;
+  ss << i;
+  out_string = ss.str();
+  food_value_left_->setValue(out_string);
+  i = food_wv_ptr->right;
+  ss <<i;
+  out_string == ss.str();
+  food_value_right_->setValue(out_string);
+  i = bv_wv_ptr->left;
+  ss << i;
+  out_string = ss.str();
+  bv_value_left_->setValue(out_string);
+  i = bv_wv_ptr->right;
+  ss <<i;
+  out_string == ss.str();
+  bv_value_right_->setValue(out_string);
+      screen()->performLayout();
+
+  /*my_velocity_container_light_.left_->
+    setValue(formatValue(wv.left_))*/
+}
 bool GraphicsArenaViewer::RunViewer() {
   return Run();
 }

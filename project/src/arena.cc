@@ -171,6 +171,8 @@ void Arena::UpdateEntitiesTimestep() {
             (ent2->get_type() == kLight && ent1->get_type() == kBraitenberg) ||
             (ent2->get_type() == kBraitenberg && ent1->get_type() == kGhost) ||
             (ent2->get_type() == kGhost && ent1->get_type() == kBraitenberg) ||
+            (ent2->get_type() == kPredator && ent1->get_type() == kGhost) ||
+            (ent2->get_type() == kGhost && ent1->get_type() == kPredator) ||
             (ent2->get_type() == kFood) || (ent1->get_type() == kFood)     ) {
           continue;
         }

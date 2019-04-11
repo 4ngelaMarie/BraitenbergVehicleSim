@@ -1,11 +1,11 @@
 /**
- * @file factory_entity.h
+ * @file subject.h
  *
  * @copyright 2017 Angela Almquist
  */
 
-#ifndef SRC_FACTORY_ENTITY_H_
-#define SRC_FACTORY_ENTITY_H_
+#ifndef SRC_SUBJECT_H_
+#define SRC_SUBJECT_H_
 
 /*******************************************************************************
  * Includes
@@ -14,8 +14,8 @@
 #include <ctime>
 #include <string>
 #include <vector>
-#include "src/arena_entity.h"
-class ArenaEntity;
+#include "src/observer.h"
+#include "src/wheel_velocity.h"
 
 /*******************************************************************************
  * Namespaces
@@ -25,34 +25,36 @@ NAMESPACE_BEGIN(csci3081);
 /*******************************************************************************
  * Class Definitions
  ******************************************************************************/
-/* @brief Entity class to represent a Braitenberg Vehicle
- *
- * A braitenberg vehicle is a simple machine that is used to show how simple
- * concepts (in this case wiring) can give way to complex looking behavior. In
- * this simulation, Braitenberg vehicles contain sensors, which can be hooked
- * up in four different ways, and thus they can exhibit four different behaviors
+/* @brief Subject class to implement the observer pattern. Subjects are watched
+ * by subscribed observers. The observer will be the graphics_arena_viewer,
+ * and the subjects will be 1 braitenberg vehicle at a time. This is used for
+ * the velocity update textbox.
  */
-class FactoryEntity {
- public :
-    FactoryEntity() {}
-    virtual ~FactoryEntity() {}
-    virtual ArenaEntity * Create(json_object* config) = 0;
+class Subject { 
+ // std::vector<Observer*> list;
+  public :
+    Subject() {}
+     virtual ~Subject() {}
+     virtual void Subscribe(Observer *observer) = 0;
+     virtual void Unsubscribe() = 0;
+     virtual void Notify(WheelVelocity* light_wv_ptr, 
+       WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) = 0;
      /**
      * @brief Under certain circumstance, the compiler requires that the
      * assignment operator is not defined. This `deletes` the default
      * assignment operator.
      */
-    FactoryEntity &operator=(const FactoryEntity &other) = delete;
+ //  Subject &operator=(const Subject &other) = delete;
 
     /**
      * @brief Under certain circumstance, the compiler requires that the copy
      * constructor is not defined. This `deletes` the default copy constructor.
     */
-    FactoryEntity(const FactoryEntity &other) = delete;
+ //  Subject(const Subject &other) = delete;
 };
 
 NAMESPACE_END(csci3081);
 
-#endif  // SRC_FACTORY_ENTITY_H_
+#endif  // SRC_SUBJECT_H_
 
 

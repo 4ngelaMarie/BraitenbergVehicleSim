@@ -34,9 +34,9 @@ BraitenbergVehicle::BraitenbergVehicle() :
   light_sensors_(), wheel_velocity_(), light_behavior_(kNone),
   food_behavior_(kNone), bv_behavior_(kNone),
   light_behavior_ptr_{new None()}, food_behavior_ptr_{new None()},
-  bv_behavior_ptr_{new None()}, closest_light_entity_(NULL),
-  closest_food_entity_(NULL), closest_bv_entity_(NULL),
-  defaultSpeed_(5.0) {
+  bv_behavior_ptr_{new None()}, gav_observer(NULL), 
+  closest_light_entity_(NULL), closest_food_entity_(NULL), 
+  closest_bv_entity_(NULL), defaultSpeed_(5.0) {
   set_type(kBraitenberg);
   motion_behavior_ = new MotionBehaviorDifferential(this);
   light_sensors_.push_back(Pose());
@@ -106,11 +106,16 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
     *closest_entity_ = NULL;
   }
 }
-/*void BraitenbergVehicle::Notify(GraphicsArenaViewer* gav_observer, 
-WheelVelocity* light_wv_ptr, WheelVelocity* food_wv_ptr, 
-WheelVelocity* bv_wv_ptr){
-  gav_observer->SomeFunction(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
-} */
+void BraitenbergVehicle::Subscribe(Observer *observer){
+	gav_observer = observer;    //  only 1 subscription at a time
+}
+void BraitenbergVehicle::Unsubscribe(){
+	gav_observer = NULL;    //  only 1 subscription at a time
+}
+void BraitenbergVehicle::Notify( WheelVelocity* light_wv_ptr,
+  WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr){
+    gav_observer->OnUpdate(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
+}
 void BraitenbergVehicle::Update() {
   WheelVelocity* light_wv_ptr = new WheelVelocity();
   WheelVelocity* food_wv_ptr = new WheelVelocity();
@@ -129,10 +134,11 @@ void BraitenbergVehicle::Update() {
     get_sensor_reading_left(closest_bv_entity_),
     get_sensor_reading_right(closest_bv_entity_),
     defaultSpeed_, bv_wv_ptr);
-//  need this to be conditional
-//  BraitenbergVehicle::Notify(gav_observer, light_wv_ptr,
-//   food_wv_ptr, bv_wv_ptr);
 
+  if (gav_observer != NULL) { 
+    Notify(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
+  }
+  
   int numBehaviors = 3;
   if (food_behavior_ == kNone) {
     numBehaviors--;

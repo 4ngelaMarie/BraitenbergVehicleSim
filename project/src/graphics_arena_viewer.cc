@@ -40,6 +40,7 @@ GraphicsArenaViewer::GraphicsArenaViewer(
         "Robot Simulation"),
     controller_(controller),
     arena_(nullptr),
+    velocity_observer_(nullptr),
     xOffset_(0),
     nanogui_intialized_(false),
     gui(nullptr),
@@ -127,6 +128,7 @@ void GraphicsArenaViewer::OnResetButtonPressed() {
 
 void GraphicsArenaViewer::SetArena(Arena *arena) {
   arena_ = arena;
+  velocity_observer_ = new VelocityObserver(); // ADDED HERE
   if (nanogui_intialized_) {
     InitNanoGUI();
   }
@@ -398,21 +400,25 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
   // Using the observer pattern
  /* my_velocity_container_light_.StoreBoxes(
     light_value_left_, light_value_right_);*/
+  velocity_observer_->textboxes[0] = light_value_left_;
+  velocity_observer_->textboxes[1] = light_value_right_;
+  velocity_observer_->textboxes[2]= food_value_left_;
+  velocity_observer_->textboxes[3] = food_value_right_;
+  velocity_observer_->textboxes[4] = bv_value_left_;
+  velocity_observer_->textboxes[5] = bv_value_right_;
 
-  entitySelect->setCallback(
+/*  entitySelect->setCallback(
     [this, isMobile, robotWidgets, lightBehaviorSelect,
     foodBehaviorSelect, BVBehaviorSelect](int index) {
-      if (index > 0/* Already observing a robot */) {
+      if (index > 0) {
         // Unsubscribe from that one
-        // ArenaEntity* entity = arena_get_entities()[index];
-       // bv_value_left_->setValue("1.0");
+         ArenaEntity* entity = arena_get_entities()[index];
       }
       // ...
-    /*  if (entity->get_type() == kBraitenberg) {
-        // ...
-        // Subscribe to observe this one
-      } */
-  });
+      if (entity->get_type() == kBraitenberg) {
+       static_cast<BraitenbergVehicle*>(entity)->Subscribe(velocity_observer_);
+      } 
+  }); */
 /************** END TEXTBOX GRAPHICS ***************/
   for (unsigned int f = 0; f < robotWidgets.size(); f++) {
     robotWidgets[f]->setVisible(defaultEntity->get_type() == kBraitenberg);
@@ -441,10 +447,13 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
 
       for (unsigned int f = 0; f < robotWidgets.size(); f++) {
         robotWidgets[f]->setVisible(entity->get_type() == kBraitenberg);
+        //ArenaEntity* tempentity = this->arena_->get_entities()[f];
+        //static_cast<BraitenbergVehicle*>(tempentity)->Unsubscribe();
+       // delete tempentity;                                       //trying to unsubscribe                   
       }
 
       if (entity->get_type() == kBraitenberg) {
-//  static_cast<BraitenbergVehicle*>(entity)->gav_observer = *this;
+       static_cast<BraitenbergVehicle*>(entity)->Subscribe(velocity_observer_); //Subscribing
         lightBehaviorSelect->setSelectedIndex(
           static_cast<BraitenbergVehicle*>(entity)->get_light_behavior());
         foodBehaviorSelect->setSelectedIndex(
@@ -495,40 +504,6 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
     });
 }
 
-// EXAMPLE of setting the value to be displayed in the velocity grid
-void GraphicsArenaViewer::SomeFunction(WheelVelocity* light_wv_ptr,
-  WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) {
-int i = light_wv_ptr->left;
-  std::string out_string;
-  std::stringstream ss;
-  ss << i;
-  out_string = ss.str();
-  light_value_left_->setValue(out_string);
-  i = light_wv_ptr->right;
-  ss <<i;
-  out_string == ss.str();
-  light_value_right_->setValue(out_string);
-  i = food_wv_ptr->left;
-  ss << i;
-  out_string = ss.str();
-  food_value_left_->setValue(out_string);
-  i = food_wv_ptr->right;
-  ss <<i;
-  out_string == ss.str();
-  food_value_right_->setValue(out_string);
-  i = bv_wv_ptr->left;
-  ss << i;
-  out_string = ss.str();
-  bv_value_left_->setValue(out_string);
-  i = bv_wv_ptr->right;
-  ss <<i;
-  out_string == ss.str();
-  bv_value_right_->setValue(out_string);
-      screen()->performLayout();
-
-  /*my_velocity_container_light_.left_->
-    setValue(formatValue(wv.left_))*/
-}
 bool GraphicsArenaViewer::RunViewer() {
   return Run();
 }

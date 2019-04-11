@@ -15,6 +15,7 @@
 #include "src/arena.h"
 #include "src/controller.h"
 #include "src/common.h"
+#include "src/velocity_observer.h"
 
 /*******************************************************************************
  * Namespaces
@@ -52,7 +53,8 @@ class Controller;
  *  Fill in the `Draw*()` methods to draw graphics on the screen using
  *  either the `nanovg` library or raw `OpenGL`.
  */
-class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer {
+class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer, 
+  public VelocityObserver {
  public:
   /**
    * @brief Constructor.
@@ -235,13 +237,12 @@ class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer {
   void DrawEntity(NVGcontext *ctx, const class ArenaEntity *const entity);
 
   void AddEntityPanel(nanogui::Widget * panel);
-  void SomeFunction(WheelVelocity* light_wv_ptr,
-    WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr);
 
   bool RunViewer() override;
 
   Controller *controller_;
   Arena *arena_;
+  VelocityObserver *velocity_observer_;
   bool paused_{true};
 
   // buttons

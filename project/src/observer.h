@@ -33,7 +33,7 @@ class Observer {
     Observer() {}
     virtual ~Observer() {}
     virtual void OnUpdate(WheelVelocity* light_wv_ptr,
-  WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) = 0;
+      WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) = 0;
      /**
      * @brief Under certain circumstance, the compiler requires that the
      * assignment operator is not defined. This `deletes` the default

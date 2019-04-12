@@ -33,32 +33,42 @@ NAMESPACE_BEGIN(csci3081);
 
 void VelocityObserver::OnUpdate(WheelVelocity* light_wv_ptr,
   WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) {
-  int i = light_wv_ptr->left;
+
+  double i = light_wv_ptr->left/3.0;
   std::cout << std::fixed << std::showpoint;
-  std::cout << std::setprecision(2);
+  std::cout << std::setprecision(3);
   
   std::string out_string;
   std::stringstream ss;
+  if ( i < .00000001) { i = 0.0;}
   ss << i;
   out_string = ss.str();
   textboxes[0]->setValue(out_string);
-  i = light_wv_ptr->right;
+  
+  i = light_wv_ptr->right/3.0;
+  if ( i < .00000001) { i = 0.0;}
   ss <<i;
   out_string == ss.str();
   textboxes[1]->setValue(out_string);
-  i = food_wv_ptr->left;
+  
+  i = food_wv_ptr->left/3.0;
+  if ( i < .00000001) { i = 0.0;}
   ss << i;
   out_string = ss.str();
   textboxes[2]->setValue(out_string);
-  i = food_wv_ptr->right;
-  ss <<i;
+  
+  i = food_wv_ptr->right/3.0;
+  if ( i < .00000001) { i = 0.0;}
+  ss << i;
   out_string == ss.str();
   textboxes[3]->setValue(out_string);
-  i = bv_wv_ptr->left;
+  i = bv_wv_ptr->left/3.0;
+  if ( i < .00000001) { i = 0.0;}
   ss << i;
   out_string = ss.str();
   textboxes[4]->setValue(out_string);
-  i = bv_wv_ptr->right;
+  i = bv_wv_ptr->right/3.0;
+  if ( i < .00000001) { i = 0.0;}
   ss <<i;
   out_string == ss.str();
   textboxes[5]->setValue(out_string);

@@ -34,10 +34,10 @@ class Subject {
  // std::vector<Observer*> list;
   public :
     Subject() {}
-     virtual ~Subject() {}
-     virtual void Subscribe(Observer *observer) = 0;
-     virtual void Unsubscribe() = 0;
-     virtual void Notify(WheelVelocity* light_wv_ptr, 
+    virtual ~Subject() {}
+    virtual void Subscribe(Observer *observer) = 0;
+    virtual void Unsubscribe() = 0;
+    virtual void Notify(WheelVelocity* light_wv_ptr, 
        WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) = 0;
      /**
      * @brief Under certain circumstance, the compiler requires that the

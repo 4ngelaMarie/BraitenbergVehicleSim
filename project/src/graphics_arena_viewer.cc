@@ -41,6 +41,7 @@ GraphicsArenaViewer::GraphicsArenaViewer(
     controller_(controller),
     arena_(nullptr),
     velocity_observer_(nullptr),
+    obs_index_(-1),
     xOffset_(0),
     nanogui_intialized_(false),
     gui(nullptr),
@@ -402,7 +403,7 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
     light_value_left_, light_value_right_);*/
   velocity_observer_->textboxes[0] = light_value_left_;
   velocity_observer_->textboxes[1] = light_value_right_;
-  velocity_observer_->textboxes[2]= food_value_left_;
+  velocity_observer_->textboxes[2] = food_value_left_;
   velocity_observer_->textboxes[3] = food_value_right_;
   velocity_observer_->textboxes[4] = bv_value_left_;
   velocity_observer_->textboxes[5] = bv_value_right_;
@@ -431,34 +432,37 @@ void GraphicsArenaViewer::AddEntityPanel(nanogui::Widget * panel) {
       static_cast<BraitenbergVehicle*>(defaultEntity)->get_food_behavior());
     BVBehaviorSelect->setSelectedIndex(
       static_cast<BraitenbergVehicle*>(defaultEntity)->get_bv_behavior());
+    obs_index_ = 0;
+    static_cast<BraitenbergVehicle*>(defaultEntity)->Subscribe(velocity_observer_); 
   }
 
   entitySelect->setCallback(
     [this, isMobile, robotWidgets, lightBehaviorSelect,
     foodBehaviorSelect, BVBehaviorSelect] (int index) {
+	  if (obs_index_ >= 0 ) {
+         ArenaEntity* old_entity = this->arena_->get_entities()[obs_index_];
+         static_cast<BraitenbergVehicle*>(old_entity)->Unsubscribe();
+	  } 
+	  obs_index_ = index;
       ArenaEntity* entity = this->arena_->get_entities()[index];
       if (entity->is_mobile()) {
         ArenaMobileEntity* mobileEntity =
         static_cast<ArenaMobileEntity*>(entity);
         isMobile->setChecked(mobileEntity->is_moving());
       }
-
       isMobile->setVisible(entity->is_mobile());
 
       for (unsigned int f = 0; f < robotWidgets.size(); f++) {
-        robotWidgets[f]->setVisible(entity->get_type() == kBraitenberg);
-        //ArenaEntity* tempentity = this->arena_->get_entities()[f];
-        //static_cast<BraitenbergVehicle*>(tempentity)->Unsubscribe();
-       // delete tempentity;                                       //trying to unsubscribe                   
+        robotWidgets[f]->setVisible(entity->get_type() == kBraitenberg);                  
       }
-
+// how to access previously selected BV? is it defaultEntity?
       if (entity->get_type() == kBraitenberg) {
-       static_cast<BraitenbergVehicle*>(entity)->Subscribe(velocity_observer_); //Subscribing
+       static_cast<BraitenbergVehicle*>(entity)->Subscribe(velocity_observer_);   //  SUBSCRIBE HERE
         lightBehaviorSelect->setSelectedIndex(
           static_cast<BraitenbergVehicle*>(entity)->get_light_behavior());
         foodBehaviorSelect->setSelectedIndex(
           static_cast<BraitenbergVehicle*>(entity)->get_food_behavior());
-        BVBehaviorSelect->setSelectedIndex(   // ADDED HERE
+        BVBehaviorSelect->setSelectedIndex(
           static_cast<BraitenbergVehicle*>(entity)->get_bv_behavior());
       }
 

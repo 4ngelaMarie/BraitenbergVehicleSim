@@ -243,6 +243,7 @@ class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer,
   Controller *controller_;
   Arena *arena_;
   VelocityObserver *velocity_observer_;
+  int obs_index_;
   bool paused_{true};
 
   // buttons

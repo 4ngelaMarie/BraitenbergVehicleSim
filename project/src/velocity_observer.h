@@ -32,11 +32,11 @@ NAMESPACE_BEGIN(csci3081);
 class VelocityObserver: public Observer {
 
  public :
- nanogui::TextBox* textboxes[6];
-    VelocityObserver() {}
+   nanogui::TextBox* textboxes[6];
+   VelocityObserver() {}
    ~VelocityObserver() {}
    void OnUpdate(WheelVelocity* light_wv_ptr,
-  WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) override;
+    WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) override;
      /**
      * @brief Under certain circumstance, the compiler requires that the
      * assignment operator is not defined. This `deletes` the default

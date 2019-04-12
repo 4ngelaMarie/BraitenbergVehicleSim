@@ -81,8 +81,8 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
     closest_entity_ = &closest_light_entity_;
   } else if (entity.get_type() == kFood) {
     closest_entity_ = &closest_food_entity_;
-  } else if (entity.get_type() == kBraitenberg) {
-      if (entity.get_id() != this->get_id()) {
+  } else if (entity.get_type() == kBraitenberg) {  // BV does not
+      if (entity.get_id() != this->get_id()) {     // sense itself
         closest_entity_ = &closest_bv_entity_;
       }
     }
@@ -135,7 +135,7 @@ void BraitenbergVehicle::Update() {
     get_sensor_reading_right(closest_bv_entity_),
     defaultSpeed_, bv_wv_ptr);
 
-  if (gav_observer != NULL) { 
+  if (gav_observer != NULL) {                      // UPDATE VELOCITY_OBSERVER
     Notify(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
   }
   

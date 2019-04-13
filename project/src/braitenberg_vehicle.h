@@ -17,6 +17,7 @@
 #include "src/common.h"
 #include "src/arena_mobile_entity.h"
 #include "src/motion_behavior_differential.h"
+#include "src/subject.h"
 
 #include "src/wheel_velocity.h"
 #include "src/behavior_enum.h"  // needed for arena_graphics buttons
@@ -44,7 +45,7 @@ NAMESPACE_BEGIN(csci3081);
  * up in four different ways, and thus they can exhibit four different behaviors
  */
 
-class BraitenbergVehicle : public ArenaMobileEntity {
+class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
  public:
   /**
    * @brief Default constructor.
@@ -91,7 +92,7 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   void set_light_behavior(Behavior behavior) {
     light_behavior_ = behavior;
-    delete light_behavior_ptr_;   // is this correct?
+    delete light_behavior_ptr_;
     switch (light_behavior_) {
       case kExplore:
         light_behavior_ptr_ = new Explore();
@@ -118,7 +119,7 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   void set_food_behavior(Behavior behavior) {
     food_behavior_ = behavior;
-    delete food_behavior_ptr_;    // is this correct?
+    delete food_behavior_ptr_;
     switch (food_behavior_) {
       case kExplore:
         food_behavior_ptr_ = new Explore();
@@ -167,8 +168,10 @@ class BraitenbergVehicle : public ArenaMobileEntity {
       break;
     }
   }
-/*  void Notify(WheelVelocity* light_wv_ptr, 
-    WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr); */
+  void Subscribe(Observer *observer) override;
+  void Unsubscribe() override;
+  void Notify(WheelVelocity* light_wv_ptr,
+    WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) override;
   double get_sensor_reading_left(const ArenaEntity* entity);
 
   double get_sensor_reading_right(const ArenaEntity* entity);
@@ -177,7 +180,6 @@ class BraitenbergVehicle : public ArenaMobileEntity {
 
   int collision_counter = 1;
 
-//  GraphicsArenaViewer* gav_observer = NULL;
  private:
   std::vector<Pose> light_sensors_;
   MotionBehaviorDifferential * motion_behavior_{nullptr};
@@ -188,6 +190,7 @@ class BraitenbergVehicle : public ArenaMobileEntity {
   BehaviorEntity* light_behavior_ptr_;  // added
   BehaviorEntity* food_behavior_ptr_;   // added
   BehaviorEntity* bv_behavior_ptr_;     // added
+  Observer* gav_observer;
   const ArenaEntity* closest_light_entity_;
   const ArenaEntity* closest_food_entity_;
   const ArenaEntity* closest_bv_entity_;

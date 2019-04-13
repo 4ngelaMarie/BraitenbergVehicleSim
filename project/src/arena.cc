@@ -151,11 +151,9 @@ void Arena::UpdateEntitiesTimestep() {
         // this is pretty ugly, I should move it into HandleCollision
         if (ent1->get_type() == kBraitenberg &&
             ent2->get_type() == kFood) {
-              AdjustEntityOverlap(ent1, ent2);  //  continue collide
           // static_cast<BraitenbergVehicle*>(ent1)->ConsumeFood();
         } else if (ent1->get_type() == kFood &&
                    ent2->get_type() == kBraitenberg) {
-              AdjustEntityOverlap(ent1, ent2);  //  continue collide
           // static_cast<BraitenbergVehicle*>(ent2)->ConsumeFood();
         }
         // lights and braitenberg vehicles do not collide

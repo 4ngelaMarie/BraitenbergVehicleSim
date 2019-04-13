@@ -34,9 +34,9 @@ BraitenbergVehicle::BraitenbergVehicle() :
   light_sensors_(), wheel_velocity_(), light_behavior_(kNone),
   food_behavior_(kNone), bv_behavior_(kNone),
   light_behavior_ptr_{new None()}, food_behavior_ptr_{new None()},
-  bv_behavior_ptr_{new None()}, closest_light_entity_(NULL),
-  closest_food_entity_(NULL), closest_bv_entity_(NULL),
-  defaultSpeed_(5.0) {
+  bv_behavior_ptr_{new None()}, gav_observer(NULL),
+  closest_light_entity_(NULL), closest_food_entity_(NULL),
+  closest_bv_entity_(NULL), defaultSpeed_(5.0) {
   set_type(kBraitenberg);
   motion_behavior_ = new MotionBehaviorDifferential(this);
   light_sensors_.push_back(Pose());
@@ -69,6 +69,10 @@ void BraitenbergVehicle::HandleCollision(__unused EntityType ent_type,
     set_color({200, 255, 200});
     set_type(kGhost);
     wheel_velocity_ = WheelVelocity(0, 0);
+    WheelVelocity* wv_ptr = &wheel_velocity_;
+    if (gav_observer != NULL) {                      // UPDATE VELOCITY_OBSERVER
+    Notify(wv_ptr, wv_ptr, wv_ptr);
+    }
   } else {
   set_heading(static_cast<int>((get_pose().theta + 180)) % 360);
   collision_counter = 1;
@@ -81,8 +85,8 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
     closest_entity_ = &closest_light_entity_;
   } else if (entity.get_type() == kFood) {
     closest_entity_ = &closest_food_entity_;
-  } else if (entity.get_type() == kBraitenberg) {
-      if (entity.get_id() != this->get_id()) {
+  } else if (entity.get_type() == kBraitenberg) {  // BV does not
+      if (entity.get_id() != this->get_id()) {     // sense itself
         closest_entity_ = &closest_bv_entity_;
       }
     }
@@ -106,32 +110,20 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
     *closest_entity_ = NULL;
   }
 }
-/*void BraitenbergVehicle::Notify(GraphicsArenaViewer* gav_observer, 
-WheelVelocity* light_wv_ptr, WheelVelocity* food_wv_ptr, 
-WheelVelocity* bv_wv_ptr){
-  gav_observer->SomeFunction(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
-} */
+void BraitenbergVehicle::Subscribe(Observer *observer) {
+  gav_observer = observer;    //  only 1 subscription at a time
+}
+void BraitenbergVehicle::Unsubscribe() {
+  gav_observer = NULL;
+}
+void BraitenbergVehicle::Notify(WheelVelocity* light_wv_ptr,
+  WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) {
+    gav_observer->OnUpdate(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
+}
 void BraitenbergVehicle::Update() {
   WheelVelocity* light_wv_ptr = new WheelVelocity();
   WheelVelocity* food_wv_ptr = new WheelVelocity();
   WheelVelocity* bv_wv_ptr = new WheelVelocity();
-  food_behavior_ptr_->getWheelVelocity(
-    get_sensor_reading_left(closest_food_entity_),
-    get_sensor_reading_right(closest_food_entity_),
-    defaultSpeed_, food_wv_ptr);
-
-  light_behavior_ptr_->getWheelVelocity(
-    get_sensor_reading_left(closest_light_entity_),
-    get_sensor_reading_right(closest_light_entity_),
-    defaultSpeed_, light_wv_ptr);
-
-  bv_behavior_ptr_->getWheelVelocity(
-    get_sensor_reading_left(closest_bv_entity_),
-    get_sensor_reading_right(closest_bv_entity_),
-    defaultSpeed_, bv_wv_ptr);
-//  need this to be conditional
-//  BraitenbergVehicle::Notify(gav_observer, light_wv_ptr,
-//   food_wv_ptr, bv_wv_ptr);
 
   int numBehaviors = 3;
   if (food_behavior_ == kNone) {
@@ -147,15 +139,30 @@ void BraitenbergVehicle::Update() {
   if (bv_behavior_ == kNone) {
     numBehaviors--;
   }
+  food_behavior_ptr_->getWheelVelocity(
+    get_sensor_reading_left(closest_food_entity_)/numBehaviors,
+    get_sensor_reading_right(closest_food_entity_)/numBehaviors,
+    defaultSpeed_, food_wv_ptr);
+  light_behavior_ptr_->getWheelVelocity(
+    get_sensor_reading_left(closest_light_entity_)/numBehaviors,
+    get_sensor_reading_right(closest_light_entity_)/numBehaviors,
+    defaultSpeed_, light_wv_ptr);
+  bv_behavior_ptr_->getWheelVelocity(
+    get_sensor_reading_left(closest_bv_entity_)/numBehaviors,
+    get_sensor_reading_right(closest_bv_entity_)/numBehaviors,
+    defaultSpeed_, bv_wv_ptr);
+
+  if (gav_observer != NULL) {                      // UPDATE VELOCITY_OBSERVER
+    Notify(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
+  }
   if (numBehaviors) {
     if (numBehaviors > 1) {
       set_color(BRAITENBERG_COLOR);
     }
     wheel_velocity_ = WheelVelocity(
-      (light_wv_ptr->left + food_wv_ptr->left + bv_wv_ptr->left)
-       /numBehaviors,
-      (light_wv_ptr->right + food_wv_ptr->right + bv_wv_ptr->right)
-      /numBehaviors, defaultSpeed_); } else {
+      (light_wv_ptr->left + food_wv_ptr->left + bv_wv_ptr->left),
+      (light_wv_ptr->right + food_wv_ptr->right + bv_wv_ptr->right),
+      defaultSpeed_); } else {
     set_color(BRAITENBERG_COLOR);
     wheel_velocity_ = WheelVelocity(0, 0);
   }

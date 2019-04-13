@@ -12,7 +12,6 @@
 #include <ctime>
 #include <string>
 #include <vector>
-#include <string>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -30,50 +29,59 @@ NAMESPACE_BEGIN(csci3081);
  *
  * The update method will be overriden.
  */
-
 void VelocityObserver::OnUpdate(WheelVelocity* light_wv_ptr,
-  WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) {
-
-  double i = light_wv_ptr->left/3.0;
-  std::cout << std::fixed << std::showpoint;
-  std::cout << std::setprecision(3);
-  
+WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) {
   std::string out_string;
-  std::stringstream ss;
-  if ( i < .00000001) { i = 0.0;}
+  std::ostringstream ss;
+
+  double i = light_wv_ptr->left;
   ss << i;
   out_string = ss.str();
-  textboxes[0]->setValue(out_string);
-  
-  i = light_wv_ptr->right/3.0;
-  if ( i < .00000001) { i = 0.0;}
-  ss <<i;
-  out_string == ss.str();
-  textboxes[1]->setValue(out_string);
-  
-  i = food_wv_ptr->left/3.0;
-  if ( i < .00000001) { i = 0.0;}
+  out_string.resize(5);
+  if (i < .001) { textboxes[0]->setValue("0.0");} else {
+    textboxes[0]->setValue(out_string); }
+  ss.str("");
+
+  i = light_wv_ptr->right;
   ss << i;
   out_string = ss.str();
-  textboxes[2]->setValue(out_string);
-  
-  i = food_wv_ptr->right/3.0;
-  if ( i < .00000001) { i = 0.0;}
-  ss << i;
-  out_string == ss.str();
-  textboxes[3]->setValue(out_string);
-  i = bv_wv_ptr->left/3.0;
-  if ( i < .00000001) { i = 0.0;}
+  out_string.resize(5);
+  if (i < .001) { textboxes[1]->setValue("0.0");} else {
+    textboxes[1]->setValue(out_string); }
+  ss.str("");
+
+  i = food_wv_ptr->left;
   ss << i;
   out_string = ss.str();
-  textboxes[4]->setValue(out_string);
-  i = bv_wv_ptr->right/3.0;
-  if ( i < .00000001) { i = 0.0;}
-  ss <<i;
-  out_string == ss.str();
-  textboxes[5]->setValue(out_string);
-  //    screen()->performLayout();
-	   };
+  out_string.resize(5);
+  if (i < .001) { textboxes[2]->setValue("0.0");} else {
+    textboxes[2]->setValue(out_string); }
+  ss.str("");
+
+  i = food_wv_ptr->right;
+  ss << i;
+  out_string = ss.str();
+  out_string.resize(5);
+  if (i < .001) { textboxes[3]->setValue("0.0");} else {
+    textboxes[3]->setValue(out_string); }
+  ss.str("");
+
+  i = bv_wv_ptr->left;
+  ss << i;
+  out_string = ss.str();
+  out_string.resize(5);
+  if (i < .001) { textboxes[4]->setValue("0.0");} else {
+    textboxes[4]->setValue(out_string); }
+  ss.str("");
+
+  i = bv_wv_ptr->right;
+  ss << i;
+  out_string = ss.str();
+  out_string.resize(5);
+  if (i < .001) { textboxes[5]->setValue("0.0");} else {
+    textboxes[5]->setValue(out_string); }
+  ss.str("");
+}
 
 NAMESPACE_END(csci3081);
 

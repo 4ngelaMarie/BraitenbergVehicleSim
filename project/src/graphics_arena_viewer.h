@@ -53,7 +53,7 @@ class Controller;
  *  Fill in the `Draw*()` methods to draw graphics on the screen using
  *  either the `nanovg` library or raw `OpenGL`.
  */
-class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer, 
+class GraphicsArenaViewer : public mingfx::GraphicsApp, public ArenaViewer,
   public VelocityObserver {
  public:
   /**

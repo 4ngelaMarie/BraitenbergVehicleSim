@@ -30,27 +30,14 @@ NAMESPACE_BEGIN(csci3081);
  * and the subjects will be 1 braitenberg vehicle at a time. This is used for
  * the velocity update textbox.
  */
-class Subject { 
- // std::vector<Observer*> list;
-  public :
-    Subject() {}
-    virtual ~Subject() {}
-    virtual void Subscribe(Observer *observer) = 0;
-    virtual void Unsubscribe() = 0;
-    virtual void Notify(WheelVelocity* light_wv_ptr, 
-       WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) = 0;
-     /**
-     * @brief Under certain circumstance, the compiler requires that the
-     * assignment operator is not defined. This `deletes` the default
-     * assignment operator.
-     */
- //  Subject &operator=(const Subject &other) = delete;
-
-    /**
-     * @brief Under certain circumstance, the compiler requires that the copy
-     * constructor is not defined. This `deletes` the default copy constructor.
-    */
- //  Subject(const Subject &other) = delete;
+class Subject {
+ public:
+  Subject() {}
+  virtual ~Subject() {}
+  virtual void Subscribe(Observer *observer) = 0;
+  virtual void Unsubscribe() = 0;
+  virtual void Notify(WheelVelocity* light_wv_ptr,
+    WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) = 0;
 };
 
 NAMESPACE_END(csci3081);

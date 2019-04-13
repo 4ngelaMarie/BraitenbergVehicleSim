@@ -45,7 +45,7 @@ NAMESPACE_BEGIN(csci3081);
  * up in four different ways, and thus they can exhibit four different behaviors
  */
 
-class BraitenbergVehicle : public ArenaMobileEntity, public Subject {    // CHANGED HERE
+class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
  public:
   /**
    * @brief Default constructor.
@@ -92,7 +92,7 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {    // CHAN
 
   void set_light_behavior(Behavior behavior) {
     light_behavior_ = behavior;
-    delete light_behavior_ptr_;   // is this correct?
+    delete light_behavior_ptr_;
     switch (light_behavior_) {
       case kExplore:
         light_behavior_ptr_ = new Explore();
@@ -119,7 +119,7 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {    // CHAN
 
   void set_food_behavior(Behavior behavior) {
     food_behavior_ = behavior;
-    delete food_behavior_ptr_;    // is this correct?
+    delete food_behavior_ptr_;
     switch (food_behavior_) {
       case kExplore:
         food_behavior_ptr_ = new Explore();
@@ -168,9 +168,9 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {    // CHAN
       break;
     }
   }
- void Subscribe(Observer *observer) override;
- void Unsubscribe() override;
- void Notify(WheelVelocity* light_wv_ptr, 
+  void Subscribe(Observer *observer) override;
+  void Unsubscribe() override;
+  void Notify(WheelVelocity* light_wv_ptr,
     WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) override;
   double get_sensor_reading_left(const ArenaEntity* entity);
 

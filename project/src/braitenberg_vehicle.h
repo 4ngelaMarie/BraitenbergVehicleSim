@@ -20,13 +20,14 @@
 #include "src/subject.h"
 
 #include "src/wheel_velocity.h"
-#include "src/behavior_enum.h"  // needed for arena_graphics buttons
+#include "src/behavior_enum.h"
 #include "src/behavior.h"
 #include "src/love.h"
 #include "src/none.h"
 #include "src/aggressive.h"
 #include "src/coward.h"
 #include "src/explore.h"
+#include "src/food.h"
 
 
 /*******************************************************************************
@@ -90,6 +91,8 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
 
   Behavior get_light_behavior() { return light_behavior_; }
 
+/** For each behavior: Create new behavior instances 
+ * These behaviors uniquely affect the BV wheel velocity **/
   void set_light_behavior(Behavior behavior) {
     light_behavior_ = behavior;
     delete light_behavior_ptr_;
@@ -146,7 +149,7 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
 
   void set_bv_behavior(Behavior behavior) {
     bv_behavior_ = behavior;
-    delete bv_behavior_ptr_;    // is this correct?
+    delete bv_behavior_ptr_;
     switch (bv_behavior_) {
       case kExplore:
         bv_behavior_ptr_ = new Explore();
@@ -168,17 +171,22 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
       break;
     }
   }
+  void ConsumeFood(Food * fp);
   void Subscribe(Observer *observer) override;
+
   void Unsubscribe() override;
+
   void Notify(WheelVelocity* light_wv_ptr,
     WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) override;
+
   double get_sensor_reading_left(const ArenaEntity* entity);
 
   double get_sensor_reading_right(const ArenaEntity* entity);
 
   static int count;
 
-  int collision_counter = 1;
+  int collision_counter_ = 20;
+  int starvation_counter_ = 0;
 
  private:
   std::vector<Pose> light_sensors_;

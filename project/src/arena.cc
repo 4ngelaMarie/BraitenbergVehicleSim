@@ -14,6 +14,7 @@
 
 #include "src/arena.h"
 #include "src/light.h"
+#include "src/food.h"
 #include "src/factory_light.h"
 #include "src/factory_food.h"
 #include "src/factory_braitenberg.h"
@@ -151,10 +152,12 @@ void Arena::UpdateEntitiesTimestep() {
         // this is pretty ugly, I should move it into HandleCollision
         if (ent1->get_type() == kBraitenberg &&
             ent2->get_type() == kFood) {
-          // static_cast<BraitenbergVehicle*>(ent1)->ConsumeFood();
+           Food* fp = static_cast<Food*>(ent2);
+           static_cast<BraitenbergVehicle*>(ent1)->ConsumeFood(fp);
         } else if (ent1->get_type() == kFood &&
                    ent2->get_type() == kBraitenberg) {
-          // static_cast<BraitenbergVehicle*>(ent2)->ConsumeFood();
+          // Food *fp = static_cast<Food*>(ent1);
+          // static_cast<BraitenbergVehicle*>(ent2)->ConsumeFood(fp);
         }
         // lights and braitenberg vehicles do not collide
         // nothing collides with food, but bv's call consume() if they do
@@ -164,7 +167,8 @@ void Arena::UpdateEntitiesTimestep() {
             (ent2->get_type() == kGhost && ent1->get_type() == kBraitenberg) ||
             (ent2->get_type() == kPredator && ent1->get_type() == kGhost) ||
             (ent2->get_type() == kGhost && ent1->get_type() == kPredator) ||
-            (ent2->get_type() == kFood) || (ent1->get_type() == kFood)     ) {
+            (ent2->get_type() == kFood) || (ent1->get_type() == kFood) ||
+            (ent2->get_type() == kLight) || (ent1->get_type() == kLight)) {
           continue;
         }
         AdjustEntityOverlap(ent1, ent2);

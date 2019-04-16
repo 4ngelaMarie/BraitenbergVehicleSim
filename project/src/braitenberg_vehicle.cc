@@ -8,6 +8,7 @@
  ******************************************************************************/
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include "src/braitenberg_vehicle.h"
 #include "src/params.h"
 #include "src/love.h"
@@ -51,11 +52,21 @@ BraitenbergVehicle::BraitenbergVehicle() :
 }
 
 void BraitenbergVehicle::TimestepUpdate(__unused unsigned int dt) {
-  collision_counter++;
-  if (collision_counter == 20) {
+  collision_counter_++;
+  starvation_counter_++;
+  if (collision_counter_ == 20) {
     set_heading(static_cast<int>((get_pose().theta - 45)) % 360);
-  } else if (collision_counter == 100) {
-    collision_counter--;
+  } else if (collision_counter_ == 100) {
+    collision_counter_--;
+  }
+  if (starvation_counter_ == 600) {
+    set_color({255, 200, 200});
+    set_type(kGhost);
+    wheel_velocity_ = WheelVelocity(0, 0);
+    WheelVelocity* wv_ptr = &wheel_velocity_;
+    if (gav_observer != NULL) {           // UPDATE VELOCITY_OBSERVER
+    Notify(wv_ptr, wv_ptr, wv_ptr);
+    }
   }
   if (is_moving()) {
     motion_behavior_->UpdatePose(dt, wheel_velocity_);
@@ -66,19 +77,37 @@ void BraitenbergVehicle::TimestepUpdate(__unused unsigned int dt) {
 void BraitenbergVehicle::HandleCollision(__unused EntityType ent_type,
                                          __unused ArenaEntity * object) {
   if (ent_type == kPredator) {
-    set_color({200, 255, 200});
+    starvation_counter_ = 0;
+    set_color({255, 200, 200});
     set_type(kGhost);
     wheel_velocity_ = WheelVelocity(0, 0);
     WheelVelocity* wv_ptr = &wheel_velocity_;
-    if (gav_observer != NULL) {                      // UPDATE VELOCITY_OBSERVER
+    if (gav_observer != NULL) {           // UPDATE VELOCITY_OBSERVER
     Notify(wv_ptr, wv_ptr, wv_ptr);
     }
+  } else if (ent_type == kFood) {
+    starvation_counter_ = 0;
   } else {
   set_heading(static_cast<int>((get_pose().theta + 180)) % 360);
-  collision_counter = 1;
+  collision_counter_ = 1;
   }
 }
-
+void BraitenbergVehicle::ConsumeFood(Food * fp) {
+    starvation_counter_ = 0;
+    double x = this->get_pose().x;
+    double y = this->get_pose().y;
+    if (x < 250) {
+      x += 200;
+    } else {
+      x -= 200;
+    }
+    if (y < 250) {
+     y += 220;
+    } else {
+     y -= 180;
+    }
+    fp->set_pose({x, y});
+}
 void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
   const ArenaEntity** closest_entity_ = NULL;
   if (entity.get_type() == kLight) {
@@ -106,7 +135,8 @@ void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
     *closest_entity_ = &entity;
     closest_distance = distance;
   }
-  if (closest_distance > 100.0) {
+/**** if BV is starving, it needs to sense food from far away ****/
+  if (closest_distance > 100.0  && starvation_counter_ < 400) {
     *closest_entity_ = NULL;
   }
 }
@@ -140,29 +170,58 @@ void BraitenbergVehicle::Update() {
     numBehaviors--;
   }
   food_behavior_ptr_->getWheelVelocity(
-    get_sensor_reading_left(closest_food_entity_)/numBehaviors,
-    get_sensor_reading_right(closest_food_entity_)/numBehaviors,
+    get_sensor_reading_left(closest_food_entity_),
+    get_sensor_reading_right(closest_food_entity_),
     defaultSpeed_, food_wv_ptr);
   light_behavior_ptr_->getWheelVelocity(
-    get_sensor_reading_left(closest_light_entity_)/numBehaviors,
-    get_sensor_reading_right(closest_light_entity_)/numBehaviors,
+    get_sensor_reading_left(closest_light_entity_),
+    get_sensor_reading_right(closest_light_entity_),
     defaultSpeed_, light_wv_ptr);
   bv_behavior_ptr_->getWheelVelocity(
-    get_sensor_reading_left(closest_bv_entity_)/numBehaviors,
-    get_sensor_reading_right(closest_bv_entity_)/numBehaviors,
+    get_sensor_reading_left(closest_bv_entity_),
+    get_sensor_reading_right(closest_bv_entity_),
     defaultSpeed_, bv_wv_ptr);
-
-  if (gav_observer != NULL) {                      // UPDATE VELOCITY_OBSERVER
+/*** Amplify its food detecting velocity ***/
+  if (starvation_counter_ > 500) {
+    set_color({ 0, 210, 240});
+    if (food_behavior_ != kNone) {
+      double ratio = get_sensor_reading_right(closest_food_entity_)/
+        get_sensor_reading_left(closest_food_entity_);
+      food_wv_ptr->right = 3.0/ratio;
+      food_wv_ptr->left = 3.0*ratio;
+    }
+    double weight = 600 - static_cast<double>(starvation_counter_);
+    double c1, c2, c3;
+    c1 = 1.0/3.0 + (2.0/3.0)*(1.0/weight);
+    c2 = 1.0/3.0 - (1.0/3.0)*(1.0/weight);
+    c3 = 1.0/3.0 - (1.0/3.0)*(1.0/weight);
+    food_wv_ptr->left *= c1;
+    food_wv_ptr->right *= c1;
+    light_wv_ptr->left *= c2;
+    light_wv_ptr->right *= c2;
+    bv_wv_ptr->left *= c3;
+    bv_wv_ptr->right *= c3;
+  } else {
+/*** Average velocities here to maintain consistancy ***/
+    light_wv_ptr->left /= numBehaviors;
+    light_wv_ptr->right /= numBehaviors;
+    food_wv_ptr->left /= numBehaviors;
+    food_wv_ptr->right /= numBehaviors;
+    bv_wv_ptr->left /= numBehaviors;
+    bv_wv_ptr->right /= numBehaviors;
+  }
+  if (gav_observer != NULL) {               // UPDATE VELOCITY_OBSERVER
     Notify(light_wv_ptr, food_wv_ptr, bv_wv_ptr);
   }
   if (numBehaviors) {
-    if (numBehaviors > 1) {
+    if (numBehaviors > 1 && starvation_counter_ < 400) {
       set_color(BRAITENBERG_COLOR);
     }
     wheel_velocity_ = WheelVelocity(
       (light_wv_ptr->left + food_wv_ptr->left + bv_wv_ptr->left),
       (light_wv_ptr->right + food_wv_ptr->right + bv_wv_ptr->right),
-      defaultSpeed_); } else {
+      defaultSpeed_);
+  } else if (starvation_counter_ < 400) {
     set_color(BRAITENBERG_COLOR);
     wheel_velocity_ = WheelVelocity(0, 0);
   }

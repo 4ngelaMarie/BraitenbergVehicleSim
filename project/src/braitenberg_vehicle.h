@@ -68,7 +68,12 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
    * @param dt The # of timesteps that have elapsed since the last update.
    */
   void TimestepUpdate(unsigned int dt) override;
-
+  /**
+   * @brief Update the wheel velocities and color of the BraitenbergVehicle.
+   * Notify any observers of the update if any are subscribed. Wheel
+   * velocities are weighted differently if BraitenbergVehicle is nearing
+   * starvation.
+   */
   void Update() override;
 
   /**
@@ -76,9 +81,13 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
    */
   void HandleCollision(EntityType ent_type,
                        ArenaEntity * object = NULL) override;
-
+  /**
+   * @brief Sense other entities in arena other than itself.
+   */
   void SenseEntity(const ArenaEntity& entity);
-
+  /**
+   * @brief Returns the ID of the BraitenbergVehicle.
+   */
   std::string get_name() const override;
 
   std::vector<Pose> get_light_sensors_const() const;
@@ -86,13 +95,20 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
   std::vector<Pose> get_light_sensors();
 
   void UpdateLightSensors();
-
+  /**
+   * @brief Create an instance of a BraitenbergVehicle based of
+   * parameters given in a json file.
+   */
   void LoadFromObject(json_object* entity_config) override;
-
+  /**
+   * @brief Returns BraitenbergVehicle's current light behavior.
+   */
   Behavior get_light_behavior() { return light_behavior_; }
 
-/** For each behavior: Create new behavior instances 
- * These behaviors uniquely affect the BV wheel velocity **/
+  /** 
+   *@brief For each behavior: Create new behavior instances 
+   * These behaviors uniquely affect the BV wheel velocity 
+   */
   void set_light_behavior(Behavior behavior) {
     light_behavior_ = behavior;
     delete light_behavior_ptr_;
@@ -117,9 +133,14 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
       break;
     }
   }
-
+  /**
+   * @brief Returns BraitenbergVehicle's current food behavior.
+   */
   Behavior get_food_behavior() { return food_behavior_; }
-
+  /** 
+   *@brief For each behavior: Create new behavior instances 
+   * These behaviors uniquely affect the BV wheel velocity 
+   */
   void set_food_behavior(Behavior behavior) {
     food_behavior_ = behavior;
     delete food_behavior_ptr_;
@@ -144,9 +165,14 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
       break;
     }
   }
-
+  /**
+   * @brief Returns BraitenbergVehicle's current robot behavior.
+   */
   Behavior get_bv_behavior() { return bv_behavior_; }
-
+  /** 
+   *@brief For each behavior: Create new behavior instances 
+   * These behaviors uniquely affect the BV wheel velocity 
+   */
   void set_bv_behavior(Behavior behavior) {
     bv_behavior_ = behavior;
     delete bv_behavior_ptr_;
@@ -171,21 +197,51 @@ class BraitenbergVehicle : public ArenaMobileEntity, public Subject {
       break;
     }
   }
+  /**
+   * @brief BraitenbergVehicle's starvation counter is reset to zero.
+   * Food's position is updated to a new location to inspire new 
+   * robot trajectories. 
+   */
   void ConsumeFood(Food * fp);
+  /**
+   * @brief Sets the BraitenbergVehicle's graphics_arena_pointer to
+   * point to the velocity_observer. Observer is then notified of
+   * updated wheel velocities upon BraitenbergVehicle::Update().
+   */
   void Subscribe(Observer *observer) override;
-
+  /**
+   * @brief Sets BraitenbergVehicle's graphics_arena_pointer, more 
+   * specifically, the velocity_observer, to NULL.
+   */
   void Unsubscribe() override;
-
+  /**
+   * @brief Notifies any subscribers of the current wheel velocities
+   * contributions from each behavior.
+   */
   void Notify(WheelVelocity* light_wv_ptr,
     WheelVelocity* food_wv_ptr, WheelVelocity* bv_wv_ptr) override;
-
+  /**
+   * @brief Returns BraitenbergVehicle's left sensor readings for given
+   * entity.
+   */
   double get_sensor_reading_left(const ArenaEntity* entity);
-
+  /**
+   * @brief Returns BraitenbergVehicle's right sensor readings for given
+   * entity.
+   */
   double get_sensor_reading_right(const ArenaEntity* entity);
-
+  /**
+   * @brief The BraitenbergVehicle's ID.
+   */
   static int count;
-
+  /**
+   * @brief Counter that changes the angle heading after collision.
+   */
   int collision_counter_ = 20;
+  /**
+   * @brief Couner that keeps track if vehicle is nearing starvation.
+   * Starvation occurs after 600 iterations.
+   */
   int starvation_counter_ = 0;
 
  private:

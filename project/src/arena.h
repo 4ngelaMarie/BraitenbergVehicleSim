@@ -71,7 +71,9 @@ class Arena {
    * Arena::UpdateEntitiesTimestep() once.
    */
   void AdvanceTime(double dt);
-
+  /**
+   * @brief Add a new enity to the arena.
+   */
   void AddEntity(ArenaEntity* entity);
 
   /**
@@ -142,7 +144,9 @@ class Arena {
    */
   void UpdateEntitiesTimestep();
 
-
+  /**
+   * @brief Return a vector list of all entities that are part of the arena.
+   */
   std::vector<class ArenaEntity *> get_entities() const { return entities_; }
 
   double get_x_dim() { return x_dim_; }

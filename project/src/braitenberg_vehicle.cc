@@ -18,7 +18,6 @@
 #include "src/explore.h"
 
 class SensorLightLove;
-//  class GraphicsArenaViewer;
 
 /*******************************************************************************
  * Namespaces

@@ -22,7 +22,7 @@ NAMESPACE_BEGIN(csci3081);
 enum EntityType {
   kLight = 0, kFood, kEntity, kBraitenberg, kPredator,
   kRightWall, kLeftWall, kTopWall, kBottomWall,
-  kGhost, kUndefined
+  kGhost, kUndefined, kLightDecorator, kFoodDecorator, kBVDecorator
 };
 
 inline EntityType get_entity_type(const std::string& type) {

@@ -15,6 +15,9 @@
 #include "src/coward.h"
 
 class SensorLightLove;
+class BVDecorator;
+class LightDecorator;
+class FoodDecorator;
 
 /*******************************************************************************
  * Namespaces
@@ -32,7 +35,7 @@ Predator::Predator() :
   food_behavior_(kNone), bv_behavior_(kAggressive),
   light_behavior_ptr_{new Coward()}, food_behavior_ptr_{new None()},
   bv_behavior_ptr_{new Aggressive()}, closest_light_entity_(NULL),
-  closest_food_entity_(NULL), closest_bv_entity_(NULL),
+  closest_food_entity_(NULL), closest_bv_entity_(NULL), entity_(NULL),
   defaultSpeed_(5.0) {
   set_type(kPredator);
   motion_behavior_ = new MotionBehaviorDifferential(this);
@@ -49,10 +52,17 @@ Predator::Predator() :
 
 void Predator::TimestepUpdate(__unused unsigned int dt) {
   collision_counter++;
+  starvation_counter_++;
   if (collision_counter == 20) {
     set_heading(static_cast<int>((get_pose().theta - 45)) % 360);
   } else if (collision_counter == 100) {
     collision_counter--;
+  }
+  if (starvation_counter_ == 600) {
+    set_color({255, 200, 200});
+    set_radius(15);
+    set_type(kGhost);
+    wheel_velocity_ = WheelVelocity(0, 0);
   }
   if (is_moving()) {
     motion_behavior_->UpdatePose(dt, wheel_velocity_);
@@ -62,20 +72,32 @@ void Predator::TimestepUpdate(__unused unsigned int dt) {
 
 void Predator::HandleCollision(__unused EntityType ent_type,
                                          __unused ArenaEntity * object) {
+  if (ent_type == kBraitenberg) {
+    starvation_counter_ = 0;
+    set_type(kPredator);
+    set_color(BRAITENBERG_COLOR);
+    set_bv_behavior(kAggressive);
+    set_light_behavior(kCoward);
+    set_food_behavior(kNone);
+    set_radius(15);
+    entity_ = NULL;
+  }
   set_heading(static_cast<int>((get_pose().theta + 180)) % 360);
   collision_counter = 1;
 }
 
 void Predator::SenseEntity(const ArenaEntity& entity) {
-  // predators do not sense food
+  // predators sense food when disguised as a BV
   const ArenaEntity** closest_entity_ = NULL;
   if (entity.get_type() == kLight) {
     closest_entity_ = &closest_light_entity_;
   } else if (entity.get_type() == kBraitenberg) {
-      if (entity.get_id() != this->get_id()) {
-        closest_entity_ = &closest_bv_entity_;
-      }
+    if (entity.get_id() != this->get_id()) {
+      closest_entity_ = &closest_bv_entity_;
     }
+  } else if (entity.get_type() == kFood) {
+    closest_entity_ = &closest_food_entity_;
+  }
 
   if (!closest_entity_) {
     return;
@@ -100,6 +122,62 @@ void Predator::SenseEntity(const ArenaEntity& entity) {
 void Predator::Update() {
   WheelVelocity* light_wv_ptr = new WheelVelocity();
   WheelVelocity* bv_wv_ptr = new WheelVelocity();
+  WheelVelocity* food_wv_ptr = new WheelVelocity();
+
+  unsigned int globalseed;
+  if (starvation_counter_ == 150) {
+    ent_enum = rand_r(&globalseed) % 3;
+    if (ent_enum == 0) {
+      entity_ = new BVDecorator();
+      set_type(kBVDecorator);
+    } else if (ent_enum == 1) {
+      entity_ = new FoodDecorator();
+      set_type(kFoodDecorator);
+    } else {
+      entity_ = new LightDecorator();
+      set_type(kLightDecorator);
+    }
+    set_color(entity_->get_colour());
+    set_radius(entity_->get_rradius());
+    set_food_behavior(entity_->get_food_behavior());
+    set_bv_behavior(entity_->get_bv_behavior());
+    set_light_behavior(entity_->get_light_behavior());
+  } else if (starvation_counter_ == 300) {
+    ent_enum = (ent_enum + 1) % 3;
+    if (ent_enum == 0) {
+      entity_ = new BVDecorator();
+      set_type(kBVDecorator);
+    } else if (ent_enum == 1) {
+      entity_ = new FoodDecorator();
+      set_type(kFoodDecorator);
+    } else {
+      entity_ = new LightDecorator();
+      set_type(kLightDecorator);
+    }
+    set_color(entity_->get_colour());
+    set_radius(entity_->get_rradius());
+    set_food_behavior(entity_->get_food_behavior());
+    set_bv_behavior(entity_->get_bv_behavior());
+    set_light_behavior(entity_->get_light_behavior());
+  } else if (starvation_counter_ == 450) {
+    ent_enum = (ent_enum + 1) % 3;
+    if (ent_enum == 0) {
+      entity_ = new BVDecorator();
+      set_type(kBVDecorator);
+    } else if (ent_enum == 1) {
+      entity_ = new FoodDecorator();
+      set_type(kFoodDecorator);
+    } else {
+      entity_ = new LightDecorator();
+      set_type(kLightDecorator);
+    }
+    set_color(entity_->get_colour());
+    set_radius(entity_->get_rradius());
+    set_food_behavior(entity_->get_food_behavior());
+    set_bv_behavior(entity_->get_bv_behavior());
+    set_light_behavior(entity_->get_light_behavior());
+  }
+/*** Transform Predator into a different type ***/
 
   light_behavior_ptr_->getWheelVelocity(
     get_sensor_reading_left(closest_light_entity_),
@@ -111,14 +189,33 @@ void Predator::Update() {
     get_sensor_reading_right(closest_bv_entity_),
     defaultSpeed_, bv_wv_ptr);
 
-  int numBehaviors = 2;
+  food_behavior_ptr_->getWheelVelocity(
+    get_sensor_reading_left(closest_food_entity_),
+    get_sensor_reading_right(closest_food_entity_),
+    defaultSpeed_, food_wv_ptr);
+
+  int numBehaviors = 3;   // continue writing this
+  if (food_behavior_ == kNone) {
+    numBehaviors--;
+  }
+  if (light_behavior_ == kNone) {
+    numBehaviors--;
+  }
+  if (bv_behavior_ == kNone) {
+    numBehaviors--;
+  }
+  if (numBehaviors == 0) {
+    wheel_velocity_ = WheelVelocity(0, 0);
+  } else {
     wheel_velocity_ = WheelVelocity(
-      (light_wv_ptr->left + bv_wv_ptr->left)
+      (light_wv_ptr->left + bv_wv_ptr->left + food_wv_ptr->left)
        /numBehaviors,
-      (light_wv_ptr->right + bv_wv_ptr->right)
+      (light_wv_ptr->right + bv_wv_ptr->right + food_wv_ptr->right)
       /numBehaviors, defaultSpeed_);
+  }
   delete light_wv_ptr;   //   added here
   delete bv_wv_ptr;      //   added here
+  delete food_wv_ptr;    //   added here
 }
 
 std::string Predator::get_name() const {

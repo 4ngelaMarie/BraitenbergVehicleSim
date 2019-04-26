@@ -16,7 +16,7 @@
 #include "src/aggressive.h"
 #include "src/coward.h"
 #include "src/explore.h"
-
+#include "src/predator.h"
 class SensorLightLove;
 
 /*******************************************************************************
@@ -75,7 +75,15 @@ void BraitenbergVehicle::TimestepUpdate(__unused unsigned int dt) {
 
 void BraitenbergVehicle::HandleCollision(__unused EntityType ent_type,
                                          __unused ArenaEntity * object) {
-  if (ent_type == kPredator) {
+  if (ent_type == kPredator ||
+      ent_type == kLightDecorator ||
+      ent_type == kFoodDecorator ||
+      ent_type == kBVDecorator) {
+    if (ent_type == kLightDecorator ||
+      ent_type == kFoodDecorator) {
+      Predator* bv = static_cast<Predator*>(object);
+      bv->HandleCollision(kBraitenberg, NULL);
+    }
     starvation_counter_ = 0;
     set_color({255, 200, 200});
     set_type(kGhost);
@@ -109,15 +117,18 @@ void BraitenbergVehicle::ConsumeFood(Food * fp) {
 }
 void BraitenbergVehicle::SenseEntity(const ArenaEntity& entity) {
   const ArenaEntity** closest_entity_ = NULL;
-  if (entity.get_type() == kLight) {
+  if (entity.get_type() == kLight ||
+    entity.get_type() == kLightDecorator) {
     closest_entity_ = &closest_light_entity_;
-  } else if (entity.get_type() == kFood) {
+  } else if (entity.get_type() == kFood ||
+    entity.get_type() == kFoodDecorator) {
     closest_entity_ = &closest_food_entity_;
-  } else if (entity.get_type() == kBraitenberg) {  // BV does not
-      if (entity.get_id() != this->get_id()) {     // sense itself
-        closest_entity_ = &closest_bv_entity_;
-      }
+  } else if (entity.get_type() == kBraitenberg ||
+    entity.get_type() == kBVDecorator) {  // BV does not
+    if (entity.get_id() != this->get_id()) {     // sense itself
+      closest_entity_ = &closest_bv_entity_;
     }
+  }
 
   if (!closest_entity_) {
     return;

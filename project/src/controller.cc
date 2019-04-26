@@ -18,6 +18,7 @@
 #include "src/light.h"
 #include "src/food.h"
 #include "src/braitenberg_vehicle.h"
+#include "src/predator.h"
 
 /*******************************************************************************
  * Namespaces
@@ -90,6 +91,7 @@ void Controller::Reset() {
   Light::count = 0;
   Food::count = 0;
   BraitenbergVehicle::count = 0;
+  Predator::count = 0;
 
   if (arena_) {
     delete (arena_);

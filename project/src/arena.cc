@@ -19,6 +19,7 @@
 #include "src/factory_food.h"
 #include "src/factory_braitenberg.h"
 #include "src/factory_predator.h"
+#include "src/food_decorator.h"
 
 /*******************************************************************************
  * Namespaces
@@ -182,12 +183,14 @@ void Arena::UpdateEntitiesTimestep() {
       }
 
       bv->Update();
-    } else if (ent1->get_type() == kPredator) {
+    } else if (ent1->get_type() == kPredator ||
+      ent1->get_type() == kBVDecorator ||
+      ent1->get_type() == kFoodDecorator ||
+      ent1->get_type() == kLightDecorator) {
       Predator* fp = static_cast<Predator*>(ent1);
       for (unsigned int f = 0; f < entities_.size(); f++) {
         fp->SenseEntity(*entities_[f]);
       }
-
       fp->Update();
     }
   }

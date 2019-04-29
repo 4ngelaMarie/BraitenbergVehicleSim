@@ -38,7 +38,7 @@ NAMESPACE_BEGIN(csci3081);
 class EntityDecorator : public ArenaEntity {
  public:
   /**
-   * @brief ArenaMobileEntity's constructor.
+   * @brief EntityDecorator's constructor.
    */
 
   EntityDecorator()

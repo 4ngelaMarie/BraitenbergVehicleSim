@@ -124,6 +124,7 @@ void Predator::Update() {
   WheelVelocity* bv_wv_ptr = new WheelVelocity();
   WheelVelocity* food_wv_ptr = new WheelVelocity();
 
+/*** Disguise a Predator into a different type ***/
   unsigned int globalseed;
   if (starvation_counter_ == 150) {
     ent_enum = rand_r(&globalseed) % 3;
@@ -177,7 +178,6 @@ void Predator::Update() {
     set_bv_behavior(entity_->get_bv_behavior());
     set_light_behavior(entity_->get_light_behavior());
   }
-/*** Transform Predator into a different type ***/
 
   light_behavior_ptr_->getWheelVelocity(
     get_sensor_reading_left(closest_light_entity_),

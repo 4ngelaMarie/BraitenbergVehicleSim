@@ -32,7 +32,6 @@ BVDecorator::BVDecorator() : rradius_(15), colour_(BRAITENBERG_COLOR),
   motion_behavior_ = new MotionBehaviorDifferential(this);
   light_sensors_.push_back(Pose());
   light_sensors_.push_back(Pose());
-  BraitenbergVehicle::set_radius(15);
   wheel_velocity_ = WheelVelocity(0, 0);
   // Set ID
   count++;

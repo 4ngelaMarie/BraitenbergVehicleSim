@@ -19,6 +19,7 @@
 #include "src/factory_food.h"
 #include "src/factory_braitenberg.h"
 #include "src/factory_predator.h"
+#include "src/food_decorator.h"
 
 /*******************************************************************************
  * Namespaces
@@ -36,10 +37,9 @@ Arena::Arena(): x_dim_(X_DIM),
     AddEntity(new Light());
     AddEntity(new Food());
     AddEntity(new BraitenbergVehicle());
-    AddEntity(new Predator());
 }
 
-Arena::Arena(json_object* arena_object_ptr): x_dim_(X_DIM),
+Arena::Arena(double x, double y, json_object* arena_object_ptr): x_dim_(X_DIM),
       y_dim_(Y_DIM),
       entities_(),
       mobile_entities_() {
@@ -47,9 +47,11 @@ Arena::Arena(json_object* arena_object_ptr): x_dim_(X_DIM),
   FactoryLight fl;
   FactoryFood ff;
   FactoryPredator fp;
-  json_object& arena_object = *arena_object_ptr;  //  here
-  x_dim_ = arena_object["width"].get<double>();
-  y_dim_ = arena_object["height"].get<double>();
+  json_object& arena_object = *arena_object_ptr;
+  // x_dim_ = arena_object["width"].get<double>();
+  // y_dim_ = arena_object["height"].get<double>();
+  x_dim_ = x;
+  y_dim_ = y;
   json_array& entities = arena_object["entities"].get<json_array>();
   for (unsigned int f = 0; f < entities.size(); f++) {
     json_object& entity_config = entities[f].get<json_object>();
@@ -182,12 +184,14 @@ void Arena::UpdateEntitiesTimestep() {
       }
 
       bv->Update();
-    } else if (ent1->get_type() == kPredator) {
+    } else if (ent1->get_type() == kPredator ||
+      ent1->get_type() == kBVDecorator ||
+      ent1->get_type() == kFoodDecorator ||
+      ent1->get_type() == kLightDecorator) {
       Predator* fp = static_cast<Predator*>(ent1);
       for (unsigned int f = 0; f < entities_.size(); f++) {
         fp->SenseEntity(*entities_[f]);
       }
-
       fp->Update();
     }
   }

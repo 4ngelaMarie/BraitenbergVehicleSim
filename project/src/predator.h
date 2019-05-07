@@ -16,6 +16,7 @@
 #include <vector>
 #include "src/common.h"
 #include "src/arena_mobile_entity.h"
+#include "src/entity_decorator.h"
 #include "src/motion_behavior_differential.h"
 #include "src/wheel_velocity.h"
 #include "src/behavior_enum.h"  // needed for arena_graphics buttons
@@ -23,7 +24,9 @@
 #include "src/none.h"
 #include "src/aggressive.h"
 #include "src/coward.h"
-
+#include "src/bv_decorator.h"
+#include "src/food_decorator.h"
+#include "src/light_decorator.h"
 
 /*******************************************************************************
  * Namespaces
@@ -112,7 +115,9 @@ class Predator : public ArenaMobileEntity {
 
   static int count;
 
-  int collision_counter = 1;
+  int collision_counter = 20;
+  int starvation_counter_ = 0;
+  int ent_enum = -1;
 
  private:
   std::vector<Pose> light_sensors_;
@@ -127,6 +132,7 @@ class Predator : public ArenaMobileEntity {
   const ArenaEntity* closest_light_entity_;
   const ArenaEntity* closest_food_entity_;
   const ArenaEntity* closest_bv_entity_;
+  EntityDecorator* entity_;
   double defaultSpeed_;
 };
 

@@ -80,6 +80,8 @@ class Controller {
   ArenaViewer* viewer_{nullptr};
   std::vector<ArenaViewer*> viewers_;
   json_value* config_;
+  double xdim_;
+  double ydim_;
 };
 
 NAMESPACE_END(csci3081);

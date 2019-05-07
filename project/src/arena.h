@@ -53,7 +53,7 @@ class Arena {
   Arena();
 
 
-  explicit Arena(json_object* arena_object);
+  explicit Arena(double x, double y, json_object* arena_object);
 
   /**
    * @brief Arena's destructor. `delete` all entities created.

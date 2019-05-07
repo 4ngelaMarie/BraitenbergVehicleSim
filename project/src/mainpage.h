@@ -41,8 +41,11 @@
  * \subsubsection executing Compiling and Executing
  * In order to start the Braitenberg Vehicle simulation, one must enter 
  * into the project directory, compile the code with make, and execute
- * by calling the arenaviewer object file and providing an .json or .txt 
- * input file. The .json and .csv files will specify the initial parameters
+ * by calling the arenaviewer object file and providing the x and
+ * y dimensions of the arean and a .json 
+ * input file. If arena dimensions are not specified, the arena will be 
+ * initialized with default dimensions, and the json will still be used. 
+ * The json file should specify the initial parameters
  * of the simulation, i.e. how many robots, predators, food and/or lights
  * should be present in the simulation as well as their behaviors. If an 
  * input file is not provided or if there is an error configuring the
@@ -51,8 +54,10 @@
  * \code{.sh}
  * cd <path>/project/
  * make
- * ./../build/bin/arenaviewer scenes/food_2lights_4bots_predator.json
+ * ./../build/bin/arenaviewer 600 600 scenes/food_2lights_4bots_predator.json
  * \endcode
+ * Where the x-dimension should be the first integer given and the y-dimension is
+ * the second integer.
  * <table border="0">
  * <tr><td>\image html Simulation.png "Simulation" width=500 
  * </table>
@@ -63,7 +68,7 @@
  * The primary classes used to develop the simulation are GraphicsArenaViewer,
  * Arena, Controller and ArenaEntity. The Controller instantiates the
  * Arena and GraphicsArenaViewer. It does so by parsing through a given
- * .json or .csv for requested initial parameters. If no parameters are given,
+ * .json for requested initial parameters. If no parameters are given,
  * the Arena is instantiated to a default value of one Braitenberg vehicle,
  * one food, one light and one predator. The Arena routinely calls the update functions of 
  * all entities in the arena. 
@@ -124,7 +129,7 @@
  * </ul>
  * 
  * \subsubsection instantiate Instantiating Arena Entities
- * To set up the simulation without a .json or .csv file input, one can
+ * To set up the simulation without a .json file input, one can
  * instantiate new arena entities in the Arena class. New entities can be created 
  * by the following C++ code.
  * \code{.cpp}
@@ -138,7 +143,7 @@
  * 
  * \endcode
  * <hr>
- * However with the input of a .json or .csv the entities are created by
+ * However with the input of a .json, the entities are created by
  * the factory pattern as explained in the next section. Each arena entity
  * is instantiated by their Create() function which is inherited by the
  * FactoryEntity interface. Code for factory pattern instantiation looks 
@@ -172,7 +177,7 @@
  *
  * New objects are made from a factory interface. This interface allows for
  * light, food, predators and braitenberg vehicle objects to be instantiated 
- * in the arena from a json or csv file. Robot behaviors towards lights, food 
+ * in the arena. Robot behaviors towards lights, food 
  * and other braitenberg vehicles are intialized to reflect the
  * json or csv input else the behaviors are prescribed a default value. 
  * Robots have no set behavior 

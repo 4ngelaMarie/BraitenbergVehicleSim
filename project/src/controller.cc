@@ -26,8 +26,29 @@
 NAMESPACE_BEGIN(csci3081);
 
 Controller::Controller(int argc, char **argv) :
-  last_dt(0), viewers_(), config_(NULL) {
-  if (argc > 1) {
+  last_dt(0), viewers_(), config_(NULL), xdim_(X_DIM), ydim_(Y_DIM) {
+  if (argc > 3) {
+    // L25: Change input parameters to take in xdim and ydim
+    xdim_ = atof(argv[1]);
+    ydim_ = atof(argv[2]);
+    std::ifstream t(std::string(argv[3]).c_str());
+    std::string str((std::istreambuf_iterator<char>(t)),
+                   std::istreambuf_iterator<char>());
+    std::string json = str;
+    config_ = new json_value();
+    std::string err = parse_json(config_, json);
+    if (!err.empty()) {
+      std::cerr << "Parse error: csv conversion not implemented: "
+      << err << std::endl;
+      delete config_;
+      config_ = NULL;
+    } else {
+       json_object& entity_config = config_->get<json_object>();
+       json_object* entity_config_ptr = &entity_config;
+       // arena_ = new Arena(config_->get<json_object>());
+       arena_ = new Arena(xdim_, ydim_, entity_config_ptr);
+    }
+  } else if (argc > 1) {
     std::ifstream t(std::string(argv[1]).c_str());
     std::string str((std::istreambuf_iterator<char>(t)),
                    std::istreambuf_iterator<char>());
@@ -42,7 +63,7 @@ Controller::Controller(int argc, char **argv) :
        json_object& entity_config = config_->get<json_object>();
        json_object* entity_config_ptr = &entity_config;
        // arena_ = new Arena(config_->get<json_object>());
-       arena_ = new Arena(entity_config_ptr);
+       arena_ = new Arena(xdim_, ydim_, entity_config_ptr);
     }
   }
   if (!config_) {
@@ -100,7 +121,7 @@ void Controller::Reset() {
     json_object& entity_config = config_->get<json_object>();
     json_object* entity_config_ptr = &entity_config;
     // arena_ = new Arena(config_->get<json_object>());
-    arena_ = new Arena(entity_config_ptr);
+    arena_ = new Arena(xdim_, ydim_, entity_config_ptr);
   } else {
     arena_ = new Arena();
   }

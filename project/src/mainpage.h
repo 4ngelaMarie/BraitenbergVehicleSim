@@ -264,5 +264,4 @@
  * <li> https://github.umn.edu/umn-csci-3081-S19/repo-almqu071/tree/master/project
  * </ul>
  */
- 
 #endif /* SRC_MAINPAGE_H_ */

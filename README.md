@@ -42,7 +42,7 @@ parameters given in arena.cc.
 
 Where the x-dimension should be the first integer given and the y-dimension is
 the second integer.
-![alt text](https://github.com/4ngelaMarie/BraitenbergVehicle/blob/master/project/docs/images/Simulation.png)
+![alt text](https://github.com/4ngelaMarie/BraitenbergVehicleSim/blob/master/project/docs/images/Simulation.png)
  A screenshot of the simulation in play. The colors of Braitenberg Vehicles
  reflect what their wheel velocities are driven by.
 
@@ -96,7 +96,7 @@ Robots have no set behavior towards predators. Predators are aggressive towards 
 vehicles and cowardice towards lights. Lights and food exhibit no behaviors
 towards other arena entities. 
 
-![alt text](https://github.com/4ngelaMarie/BraitenbergVehicle/blob/master/project/docs/images/FactoryEntity.png)
+![alt text](https://github.com/4ngelaMarie/BraitenbergVehicleSim/blob/master/project/docs/images/FactoryEntity.png)
  
 Behaviors are also created with a behavior entity interface. When a behavior is selected for a braitenberg vehicle, a 
 new instance of a behavior is created after deleted of the old one.
@@ -107,7 +107,7 @@ a vehicle can exhibit towards lights, food and other braitenberg vehicles
 are: Coward, Explore, Love, Aggressive or None. Similar behavior instances
 are made for the predator class however predator behaviors cannot be adjusted by the user.
 
-![alt text](https://github.com/4ngelaMarie/BraitenbergVehicle/blob/master/project/docs/images/Behaviors.png)
+![alt text](https://github.com/4ngelaMarie/BraitenbergVehicleSim/blob/master/project/docs/images/Behaviors.png)
 
  ## Observer Pattern
 The observer pattern allows for the wheel velocities of a selected
@@ -120,7 +120,7 @@ Once subscribed, when BraitenbergVehicle::Update() is called, the
 graphics_arena_viewer is notified of the updated wheel velocities.
 If a new robot is selected, the graphics_arena_viewer unsubscribes from the previously selected robot so only 
 wheel velocities of one robot are shown at one time. 
-![alt text](https://github.com/4ngelaMarie/BraitenbergVehicle/blob/master/project/docs/images/Subject.png)
+![alt text](https://github.com/4ngelaMarie/BraitenbergVehicleSim/blob/master/project/docs/images/Subject.png)
 The UML diagram of Braitenberg vehicle as a Subject.
 
 ## Decorator Pattern
